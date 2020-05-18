@@ -8,6 +8,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -15,8 +18,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest
@@ -56,5 +58,15 @@ public class BusinessGatewayMongoImplTest {
 
         assertEquals(sampleTestingBusiness, result);
         assertNotNull(result.getId());
+    }
+
+    @Test
+    public void shouldReturnPagedResultOnRequest() {
+        Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
+                PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
+        );
+
+        assertNotNull(allBusinesses);
+        assertTrue(allBusinesses.isEmpty());
     }
 }

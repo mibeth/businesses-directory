@@ -4,14 +4,19 @@ import com.nl.icwdirectory.domain.Address
 import com.nl.icwdirectory.domain.Business
 import com.nl.icwdirectory.domain.exception.InvalidPhoneException
 import com.nl.icwdirectory.gateway.BusinessGateway
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import spock.lang.Specification
 
 class CreateBusinessSpec extends Specification {
     BusinessGateway businessGateway = Mock(BusinessGateway.class)
     CreateBusiness createBusiness
+    GetBusinesses getBusinesses
 
     def setup() {
         createBusiness = new CreateBusiness(businessGateway)
+        getBusinesses = new GetBusinesses(businessGateway)
     }
 
     def "test create business"() {
@@ -103,5 +108,21 @@ class CreateBusinessSpec extends Specification {
         then: "then should throw an exception"
         def exception = thrown(InvalidPhoneException)
         exception.message == "The phone number can't be null"
+    }
+
+    def "Check that returns empty result when querying all elements on DB"() {
+        given: "Page 0 is requested"
+        def pageable = PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
+
+        and: "a result is generated"
+        businessGateway.getAllBusinesses(pageable) >> {
+            Page.empty()
+        }
+
+        when: "requests for all elements on DB"
+        Page<Business> result = getBusinesses.getAllBusinesses(pageable)
+
+        then: "then should return http OK Response with result"
+        result != null
     }
 }

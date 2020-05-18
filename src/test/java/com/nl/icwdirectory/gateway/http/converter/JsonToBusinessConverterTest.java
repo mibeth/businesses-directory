@@ -10,13 +10,13 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.List;
 
-public class CreateBusinessJsonToBusinessTest {
+public class JsonToBusinessConverterTest {
 
-    private CreateBusinessJsonToBusiness createBusinessJsonToBusiness;
+    private JsonToBusinessConverter jsonToBusinessConverter;
 
     @Before
     public void setupTest() {
-        createBusinessJsonToBusiness = new CreateBusinessJsonToBusiness();
+        jsonToBusinessConverter = new JsonToBusinessConverter();
     }
 
     @Test
@@ -37,7 +37,7 @@ public class CreateBusinessJsonToBusinessTest {
                 .tags(List.of("clothing", "kleren"))
                 .build();
 
-        Business result = createBusinessJsonToBusiness.convert(businessToConvert);
+        Business result = jsonToBusinessConverter.convert(businessToConvert);
         EqualsBuilder.reflectionEquals(businessToConvert, result);
     }
 }
