@@ -15,8 +15,16 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-      - name: Build and test with Maven
-        run: mvn clean test -B -V
+      - name: Cache Maven packages
+        uses: actions/cache@v1
+        with:
+          path: ~/.m2
+          key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-m2
+      - name: Build code
+        run: mvn clean compile -B -V
+      - name: Test with Maven
+        run: mvn test -B -V
 
   sonar:
     needs: build
@@ -25,6 +33,7 @@ jobs:
     steps:
       - name: Clone Repository
         uses: actions/checkout@v2
+      - run: git fetch --unshallow
       - name: Set up JDK
         uses: actions/setup-java@v1
         with:
