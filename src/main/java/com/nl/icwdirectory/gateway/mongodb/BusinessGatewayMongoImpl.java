@@ -4,6 +4,8 @@ import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.BusinessGateway;
 import com.nl.icwdirectory.gateway.mongodb.repository.BusinessRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -21,5 +23,12 @@ public class BusinessGatewayMongoImpl implements BusinessGateway {
         Business insertedBusiness = businessRepository.insert(businessToBeCreated);
         log.info("Business successfully created: {}", insertedBusiness);
         return insertedBusiness;
+    }
+
+    @Override
+    public Page<Business> getAllBusinesses(final Pageable pageable) {
+        Page<Business> businesses = businessRepository.findAll(pageable);
+        log.info("All businesses queried, total records found: {}", businesses.getTotalElements());
+        return businesses;
     }
 }
