@@ -1,26 +1,28 @@
 package com.nl.icwdirectory.gateway.http.json;
 
 import com.nl.icwdirectory.domain.Address;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Value;
 
 import java.util.List;
 
 @AllArgsConstructor
-@Getter
+@Value
 @Builder
 public class BusinessJson {
 
-    private final String id;
-    private final String name;
-    private final String ownerFirstName;
-    private final String ownerLastName;
-    private final Address address;
-    private final String email;
-    private final String website;
-    private final String phone;
-    private final String logo;
-    private final List<String> images;
-    private final String description;
-    private final List<String> tags;
+    String id;
+    String name;
+    String ownerFirstName;
+    String ownerLastName;
+    Address address;
+    String email;
+    String website;
+    String phone;
+    String logo;
+    List<String> images;
+    String description;
+    List<String> tags;
 
 }

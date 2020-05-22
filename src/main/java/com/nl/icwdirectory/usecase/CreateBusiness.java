@@ -12,7 +12,7 @@ import static org.springframework.util.Assert.notNull;
 @Slf4j
 public class CreateBusiness {
 
-    public static final String PHONE_CANT_BE_NULL = "The phone number can't be null";
+    private static final String PHONE_CANT_BE_NULL = "The phone number can't be null";
     private final BusinessGateway businessGateway;
 
     public CreateBusiness(final BusinessGateway businessGateway) {

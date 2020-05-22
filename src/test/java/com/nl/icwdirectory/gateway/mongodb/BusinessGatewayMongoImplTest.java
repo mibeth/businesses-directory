@@ -23,7 +23,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringRunner.class)
 @DataMongoTest
 @ComponentScan(basePackageClasses = BusinessGatewayMongoImpl.class)
-public class BusinessGatewayMongoImplTest {
+public final class BusinessGatewayMongoImplTest {
 
     @Autowired
     private BusinessGatewayMongoImpl businessGatewayMongoImpl;

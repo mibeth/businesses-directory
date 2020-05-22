@@ -10,7 +10,7 @@ import org.junit.Test;
 import java.util.Collections;
 import java.util.List;
 
-public class JsonToBusinessConverterTest {
+public final class JsonToBusinessConverterTest {
 
     private JsonToBusinessConverter jsonToBusinessConverter;
 

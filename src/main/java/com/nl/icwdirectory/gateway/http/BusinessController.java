@@ -28,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Slf4j
-public class BusinessController {
+final class BusinessController {
 
     private final JsonToBusinessConverter jsonToBusinessConverter;
     private final BusinessToJsonConverter businessToJsonConverter;

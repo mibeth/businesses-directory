@@ -1,11 +1,5 @@
 package com.nl.icwdirectory.config.springfox;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
-
-import com.google.common.collect.Lists;
-import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,9 +13,13 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+import java.util.List;
+
+import static org.springframework.http.HttpStatus.*;
+
 @Configuration
 @EnableSwagger2
-public class SpringfoxConfig {
+public final class SpringfoxConfig {
 
   @Bean
   public Docket gatewayApi() {
@@ -37,7 +35,7 @@ public class SpringfoxConfig {
   }
 
   private List<ResponseMessage> defaultErrorsMessage() {
-    return Lists.newArrayList(
+    return List.of(
         new ResponseMessageBuilder().code(INTERNAL_SERVER_ERROR.value())
             .message("Server error while processing request").build(),
         new ResponseMessageBuilder().code(NOT_FOUND.value())

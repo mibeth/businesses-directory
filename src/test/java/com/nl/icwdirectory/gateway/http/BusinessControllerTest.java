@@ -31,7 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
 @RunWith(MockitoJUnitRunner.class)
-public class BusinessControllerTest {
+public final class BusinessControllerTest {
 
     private JsonToBusinessConverter jsonToBusinessConverter;
     private BusinessToJsonConverter businessToJsonConverter;
