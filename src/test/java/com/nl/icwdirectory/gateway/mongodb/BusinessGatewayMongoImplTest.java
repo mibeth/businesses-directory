@@ -39,7 +39,39 @@ public final class BusinessGatewayMongoImplTest {
 
     @Test
     public void shouldCreateANewBusiness() {
-        Business sampleTestingBusiness = Business.builder()
+        Business sampleTestingBusiness = buildSampleBusiness();
+        Business result = businessGatewayMongoImpl.create(sampleTestingBusiness);
+
+        assertEquals(sampleTestingBusiness, result);
+        assertNotNull(result.getId());
+    }
+
+    @Test
+    public void shouldReturnEmptyResultWhenNoRecordsFound() {
+        Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
+                PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
+        );
+
+        assertNotNull(allBusinesses);
+        assertTrue(allBusinesses.isEmpty());
+    }
+
+    @Test
+    public void shouldReturnPagedResultOnRequest() {
+        Business sampleTestingBusiness = buildSampleBusiness();
+        mongoTemplate.insert(sampleTestingBusiness);
+
+        Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
+                PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
+        );
+
+        assertNotNull(allBusinesses);
+        assertEquals(1, allBusinesses.getTotalElements());
+        assertEquals("Granny's clothing", allBusinesses.getContent().get(0).getName());
+    }
+
+    private Business buildSampleBusiness() {
+        return Business.builder()
                 .name("Granny's clothing")
                 .ownerFirstName("Satan")
                 .ownerLastName("Lucifer")
@@ -54,19 +86,5 @@ public final class BusinessGatewayMongoImplTest {
                 .description("The business purpose")
                 .tags(List.of("clothing", "kleren"))
                 .build();
-        Business result = businessGatewayMongoImpl.create(sampleTestingBusiness);
-
-        assertEquals(sampleTestingBusiness, result);
-        assertNotNull(result.getId());
-    }
-
-    @Test
-    public void shouldReturnPagedResultOnRequest() {
-        Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
-                PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
-        );
-
-        assertNotNull(allBusinesses);
-        assertTrue(allBusinesses.isEmpty());
     }
 }

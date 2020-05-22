@@ -73,6 +73,7 @@ final class BusinessController {
     public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam final int pageNumber) {
         final Page<Business> businesses = getBusinesses.getAllBusinesses(
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
+
         return ResponseEntity.ok(
                 businessToJsonConverter.convert(Lists.newArrayList(businesses)));
     }
