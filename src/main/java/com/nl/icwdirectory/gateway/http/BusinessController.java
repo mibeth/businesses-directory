@@ -28,7 +28,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Slf4j
-public class BusinessController {
+final class BusinessController {
 
     private final JsonToBusinessConverter jsonToBusinessConverter;
     private final BusinessToJsonConverter businessToJsonConverter;
@@ -73,6 +73,7 @@ public class BusinessController {
     public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam final int pageNumber) {
         final Page<Business> businesses = getBusinesses.getAllBusinesses(
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
+
         return ResponseEntity.ok(
                 businessToJsonConverter.convert(Lists.newArrayList(businesses)));
     }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class BusinessGatewayMongoImpl implements BusinessGateway {
+public final class BusinessGatewayMongoImpl implements BusinessGateway {
 
     private final BusinessRepository businessRepository;
 

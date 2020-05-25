@@ -3,14 +3,15 @@ package com.nl.icwdirectory.gateway.http.converter;
 import com.nl.icwdirectory.domain.Address;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.http.json.CreateBusinessJson;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Collections;
 import java.util.List;
 
-public class JsonToBusinessConverterTest {
+import static org.assertj.core.api.Assertions.assertThat;
+
+public final class JsonToBusinessConverterTest {
 
     private JsonToBusinessConverter jsonToBusinessConverter;
 
@@ -38,6 +39,7 @@ public class JsonToBusinessConverterTest {
                 .build();
 
         Business result = jsonToBusinessConverter.convert(businessToConvert);
-        EqualsBuilder.reflectionEquals(businessToConvert, result);
+
+        assertThat(result).usingRecursiveComparison().ignoringFields("id").isEqualTo(businessToConvert);
     }
 }

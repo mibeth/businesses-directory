@@ -1,6 +1,5 @@
 package com.nl.icwdirectory.domain;
 
-import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,8 +15,7 @@ import java.util.List;
 @Builder
 @Data
 @Document(collection = "businesses")
-@SuppressFBWarnings
-public class Business {
+public final class Business {
 
     @Id
     private String id;

@@ -12,11 +12,9 @@ import spock.lang.Specification
 class CreateBusinessSpec extends Specification {
     BusinessGateway businessGateway = Mock(BusinessGateway.class)
     CreateBusiness createBusiness
-    GetBusinesses getBusinesses
 
     def setup() {
         createBusiness = new CreateBusiness(businessGateway)
-        getBusinesses = new GetBusinesses(businessGateway)
     }
 
     def "test create business"() {
@@ -35,7 +33,7 @@ class CreateBusinessSpec extends Specification {
         and: "a random UUID identifying the business id created"
         def randomUUID = UUID.randomUUID().toString()
         businessGateway.create(businessToBeCreated) >> {
-            def createdbusiness = Business.builder()
+            Business.builder()
                     .name("Granny's clothing")
                     .ownerFirstName("Satan")
                     .email("klerengekste@gmail.com")
@@ -45,7 +43,6 @@ class CreateBusinessSpec extends Specification {
                             .build())
                     .id(randomUUID)
                     .build()
-            createdbusiness
         }
 
         when: "I try to create the business"
@@ -110,19 +107,4 @@ class CreateBusinessSpec extends Specification {
         exception.message == "The phone number can't be null"
     }
 
-    def "Check that returns empty result when querying all elements on DB"() {
-        given: "Page 0 is requested"
-        def pageable = PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
-
-        and: "a result is generated"
-        businessGateway.getAllBusinesses(pageable) >> {
-            Page.empty()
-        }
-
-        when: "requests for all elements on DB"
-        Page<Business> result = getBusinesses.getAllBusinesses(pageable)
-
-        then: "then should return http OK Response with result"
-        result != null
-    }
 }

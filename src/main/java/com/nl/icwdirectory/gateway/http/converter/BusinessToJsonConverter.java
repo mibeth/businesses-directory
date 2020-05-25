@@ -5,7 +5,6 @@ import com.nl.icwdirectory.gateway.http.json.BusinessJson;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
