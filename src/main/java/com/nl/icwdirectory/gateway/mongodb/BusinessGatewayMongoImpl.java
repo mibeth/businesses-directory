@@ -19,6 +19,12 @@ public final class BusinessGatewayMongoImpl implements BusinessGateway {
     }
 
     @Override
+    public void delete(String businessIdToBeDeleted) {
+        businessRepository.deleteById(businessIdToBeDeleted);
+        log.info("Executed delete operation, business id {}", businessIdToBeDeleted);
+    }
+
+    @Override
     public Business create(final Business businessToBeCreated) {
         Business insertedBusiness = businessRepository.insert(businessToBeCreated);
         log.info("Business successfully created: {}", insertedBusiness);

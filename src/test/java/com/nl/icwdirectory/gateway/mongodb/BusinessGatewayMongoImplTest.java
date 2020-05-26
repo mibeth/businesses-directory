@@ -38,6 +38,15 @@ public final class BusinessGatewayMongoImplTest {
     }
 
     @Test
+    public void shouldDeleteABusiness() {
+        Business business = mongoTemplate.insert(buildSampleBusiness());
+        List<Business> businessList = mongoTemplate.findAll(Business.class);
+        assertEquals(1, businessList.size());
+        businessGatewayMongoImpl.delete(business.getId());
+        assertTrue(mongoTemplate.findAll(Business.class).isEmpty());
+    }
+
+    @Test
     public void shouldCreateANewBusiness() {
         Business sampleTestingBusiness = buildSampleBusiness();
         Business result = businessGatewayMongoImpl.create(sampleTestingBusiness);

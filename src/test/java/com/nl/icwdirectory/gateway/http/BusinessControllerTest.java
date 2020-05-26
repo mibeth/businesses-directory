@@ -1,10 +1,7 @@
 package com.nl.icwdirectory.gateway.http;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.common.collect.Lists;
 import com.nl.icwdirectory.domain.Address;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.http.converter.BusinessToJsonConverter;
@@ -13,6 +10,7 @@ import com.nl.icwdirectory.gateway.http.json.BusinessJson;
 import com.nl.icwdirectory.gateway.http.json.CreateBusinessJson;
 import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
+import com.nl.icwdirectory.usecase.DeleteBusiness;
 import com.nl.icwdirectory.usecase.GetBusinesses;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,6 +19,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -36,7 +35,6 @@ import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
@@ -45,6 +43,7 @@ public final class BusinessControllerTest {
 
     private JsonToBusinessConverter jsonToBusinessConverter;
     private BusinessToJsonConverter businessToJsonConverter;
+    private DeleteBusiness deleteBusiness;
     private CreateBusiness createBusiness;
     private GetBusinesses getBusinesses;
     private BusinessController businessController;
@@ -55,15 +54,32 @@ public final class BusinessControllerTest {
     public void setUp() {
         jsonToBusinessConverter = mock(JsonToBusinessConverter.class);
         businessToJsonConverter = mock(BusinessToJsonConverter.class);
+        deleteBusiness = mock(DeleteBusiness.class);
         createBusiness = mock(CreateBusiness.class);
         getBusinesses = mock(GetBusinesses.class);
         businessController = new BusinessController(
                 jsonToBusinessConverter,
                 businessToJsonConverter,
+                deleteBusiness,
                 createBusiness,
                 getBusinesses);
         mockMvc = standaloneSetup(businessController).build();
         objectMapper = new ObjectMapper();
+    }
+
+    @Test
+    public void shouldDeleteBusinessById() throws Exception {
+        // GIVEN a Business Id to be deleted
+        String businessId = "5ec2f3cb71db2a7c13beb4fd";
+
+        // WHEN I try to consume the endpoint to delete a business
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(URLMapping.DELETE_BUSINESS, businessId)
+        .contentType(APPLICATION_JSON))
+                .andReturn();
+
+        // THEN It should delete a business
+        verify(deleteBusiness).deleteById(businessId);
+        assertEquals(HttpStatus.NO_CONTENT.value(), mvcResult.getResponse().getStatus());
     }
 
     @Test
