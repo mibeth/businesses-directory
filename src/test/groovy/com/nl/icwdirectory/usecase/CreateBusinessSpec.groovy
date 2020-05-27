@@ -4,17 +4,18 @@ import com.nl.icwdirectory.domain.Address
 import com.nl.icwdirectory.domain.Business
 import com.nl.icwdirectory.domain.exception.InvalidPhoneException
 import com.nl.icwdirectory.gateway.BusinessGateway
-import org.springframework.data.domain.Page
-import org.springframework.data.domain.PageRequest
-import org.springframework.data.domain.Sort
 import spock.lang.Specification
 
 class CreateBusinessSpec extends Specification {
     BusinessGateway businessGateway = Mock(BusinessGateway.class)
     CreateBusiness createBusiness
+    GetBusinesses getBusinesses
+    DeleteBusiness deleteBusiness
 
     def setup() {
         createBusiness = new CreateBusiness(businessGateway)
+        getBusinesses = new GetBusinesses(businessGateway)
+        deleteBusiness = new DeleteBusiness(businessGateway)
     }
 
     def "test create business"() {

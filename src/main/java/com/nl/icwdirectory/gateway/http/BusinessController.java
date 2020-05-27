@@ -8,6 +8,7 @@ import com.nl.icwdirectory.gateway.http.json.BusinessJson;
 import com.nl.icwdirectory.gateway.http.json.CreateBusinessJson;
 import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
+import com.nl.icwdirectory.usecase.DeleteBusiness;
 import com.nl.icwdirectory.usecase.GetBusinesses;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -32,6 +33,7 @@ final class BusinessController {
 
     private final JsonToBusinessConverter jsonToBusinessConverter;
     private final BusinessToJsonConverter businessToJsonConverter;
+    private final DeleteBusiness deleteBusiness;
     private final CreateBusiness createBusiness;
     private final GetBusinesses getBusinesses;
 
@@ -41,12 +43,27 @@ final class BusinessController {
     public BusinessController(
             JsonToBusinessConverter jsonToBusinessConverter,
             BusinessToJsonConverter businessToJsonConverter,
+            DeleteBusiness deleteBusiness,
             CreateBusiness createBusiness,
             GetBusinesses getBusinesses) {
         this.jsonToBusinessConverter = jsonToBusinessConverter;
         this.businessToJsonConverter = businessToJsonConverter;
+        this.deleteBusiness = deleteBusiness;
         this.createBusiness = createBusiness;
         this.getBusinesses = getBusinesses;
+    }
+
+    @ApiOperation(value = "Delete a Business")
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Executed business delete operation")
+    })
+    @DeleteMapping(value = URLMapping.DELETE_BUSINESS)
+    public ResponseEntity<BusinessJson> deleteBusinessById(@PathVariable String id){
+        log.info("Deleting Business id {}", id);
+        deleteBusiness.deleteById(id);
+        return ResponseEntity
+                .status(HttpStatus.NO_CONTENT)
+                .build();
     }
 
     @ApiOperation(value = "Create a new Business")

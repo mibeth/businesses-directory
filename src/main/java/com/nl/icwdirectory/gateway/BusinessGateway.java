@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface BusinessGateway {
 
+  void delete(final String businessIdToBeDeleted);
   Business create(final Business businessToBeCreated);
   Page<Business> getAllBusinesses(final Pageable pageRequest);
 
