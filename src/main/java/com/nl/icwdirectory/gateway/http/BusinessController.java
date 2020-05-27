@@ -43,7 +43,8 @@ final class BusinessController {
     public BusinessController(
             JsonToBusinessConverter jsonToBusinessConverter,
             BusinessToJsonConverter businessToJsonConverter,
-            DeleteBusiness deleteBusiness, CreateBusiness createBusiness,
+            DeleteBusiness deleteBusiness,
+            CreateBusiness createBusiness,
             GetBusinesses getBusinesses) {
         this.jsonToBusinessConverter = jsonToBusinessConverter;
         this.businessToJsonConverter = businessToJsonConverter;
