@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Slf4j
 public final class BusinessGatewayMongoImpl implements BusinessGateway {
@@ -28,6 +30,13 @@ public final class BusinessGatewayMongoImpl implements BusinessGateway {
     public Business create(final Business businessToBeCreated) {
         Business insertedBusiness = businessRepository.insert(businessToBeCreated);
         log.info("Business successfully created: {}", insertedBusiness);
+        return insertedBusiness;
+    }
+
+    @Override
+    public List<Business> createFromFile(final List<Business> businessToBeCreated) {
+        List<Business> insertedBusiness = businessRepository.insert(businessToBeCreated);
+        log.info("Businesses successfully created: {}", insertedBusiness);
         return insertedBusiness;
     }
 

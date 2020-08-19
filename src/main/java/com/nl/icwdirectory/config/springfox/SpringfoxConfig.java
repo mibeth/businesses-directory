@@ -19,7 +19,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @Configuration
 @EnableSwagger2
-public final class SpringfoxConfig {
+public class SpringfoxConfig {
 
   @Bean
   public Docket gatewayApi() {

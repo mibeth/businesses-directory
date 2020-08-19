@@ -168,7 +168,7 @@ public final class BusinessControllerTest {
         ReflectionTestUtils.setField(businessController, "elementsPerPage", 6);
 
         when(getBusinesses.getAllBusinesses(any())).thenReturn(Page.empty());
-        when(businessToJsonConverter.convert(anyList())).thenCallRealMethod();
+        when(businessToJsonConverter.convert(any())).thenCallRealMethod();
 
         MvcResult mvcResult = mockMvc.perform(get(URLMapping.GET_BUSINESSES)
                 .queryParam("pageNumber", String.valueOf(0))
@@ -179,7 +179,7 @@ public final class BusinessControllerTest {
         assertNotNull(mvcResult.getResponse());
         assertEquals("[]", mvcResult.getResponse().getContentAsString());
         verify(getBusinesses).getAllBusinesses(any());
-        verify(businessToJsonConverter).convert(anyList());
+        verify(businessToJsonConverter).convert(any());
     }
 
     @Test
@@ -210,7 +210,7 @@ public final class BusinessControllerTest {
 
         when(getBusinesses.getAllBusinesses(any(PageRequest.class))).thenReturn(result);
         when(businessToJsonConverter.convert(any(Business.class))).thenCallRealMethod();
-        when(businessToJsonConverter.convert(anyList())).thenCallRealMethod();
+        when(businessToJsonConverter.convert(any())).thenCallRealMethod();
 
         MvcResult mvcResult = mockMvc.perform(get(URLMapping.GET_BUSINESSES)
                 .param("pageNumber", String.valueOf(0))
@@ -226,6 +226,6 @@ public final class BusinessControllerTest {
         assertNotNull(mvcResult.getResponse());
         assertEquals(expectedResult, businessFromResponse);
         verify(getBusinesses).getAllBusinesses(any());
-        verify(businessToJsonConverter).convert(anyList());
+        verify(businessToJsonConverter).convert(any());
     }
 }

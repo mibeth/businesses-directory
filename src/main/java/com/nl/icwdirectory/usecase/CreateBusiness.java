@@ -6,6 +6,8 @@ import com.nl.icwdirectory.gateway.BusinessGateway;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 import static org.springframework.util.Assert.notNull;
 
 @Service
@@ -23,6 +25,11 @@ public class CreateBusiness {
         validateBusiness(businessToBeCreated);
         log.info("Creating business {}", businessToBeCreated);
         return businessGateway.create(businessToBeCreated);
+    }
+
+    public List<Business> createFromFile(final List<Business> businesses) {
+        log.info("Creating businesses from file");
+        return businessGateway.createFromFile(businesses);
     }
 
     private void validateBusiness(final Business businessToBeCreated) {

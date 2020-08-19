@@ -5,9 +5,6 @@ import com.nl.icwdirectory.gateway.http.json.BusinessJson;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 @Component
 public class BusinessToJsonConverter implements Converter<Business, BusinessJson> {
 
@@ -29,7 +26,4 @@ public class BusinessToJsonConverter implements Converter<Business, BusinessJson
                 .build();
     }
 
-    public List<BusinessJson> convert(List<Business> businesses) {
-        return businesses.stream().map(this::convert).collect(Collectors.toUnmodifiableList());
-    }
 }

@@ -1,6 +1,5 @@
 package com.nl.icwdirectory.gateway.http;
 
-import com.google.common.collect.Lists;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.http.converter.BusinessToJsonConverter;
 import com.nl.icwdirectory.gateway.http.converter.JsonToBusinessConverter;
@@ -24,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -58,7 +58,7 @@ final class BusinessController {
             @ApiResponse(code = 204, message = "Executed business delete operation")
     })
     @DeleteMapping(value = URLMapping.DELETE_BUSINESS)
-    public ResponseEntity<BusinessJson> deleteBusinessById(@PathVariable String id){
+    public ResponseEntity<BusinessJson> deleteBusinessById(@PathVariable String id) {
         log.info("Deleting Business id {}", id);
         deleteBusiness.deleteById(id);
         return ResponseEntity
@@ -92,6 +92,6 @@ final class BusinessController {
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
 
         return ResponseEntity.ok(
-                businessToJsonConverter.convert(Lists.newArrayList(businesses)));
+                businesses.stream().map(businessToJsonConverter::convert).collect(Collectors.toUnmodifiableList()));
     }
 }
