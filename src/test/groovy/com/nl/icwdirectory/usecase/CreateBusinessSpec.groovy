@@ -108,4 +108,41 @@ class CreateBusinessSpec extends Specification {
         exception.message == "The phone number can't be null"
     }
 
+    def "test create business from file"() {
+        given: "A list of businesses to be created"
+        def businessToBeCreated = List.of(Business.builder()
+                .name("Granny's clothing")
+                .ownerFirstName("Satan")
+                .email("klerengekste@gmail.com")
+                .phone("0629795318")
+                .address(Address.builder()
+                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .build())
+                .build())
+        println "businessToBeCreated = $businessToBeCreated"
+
+        and: "a random UUID identifying the business id created"
+        def randomUUID = UUID.randomUUID().toString()
+        businessGateway.createFromFile(businessToBeCreated) >> {
+            List.of(Business.builder()
+                    .name("Granny's clothing")
+                    .ownerFirstName("Satan")
+                    .email("klerengekste@gmail.com")
+                    .phone("0629795318")
+                    .address(Address.builder()
+                            .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                            .build())
+                    .id(randomUUID)
+                    .build())
+        }
+
+        when: "I try to create the business with a list"
+        List<Business> createdbusiness = createBusiness.createFromFile(businessToBeCreated)
+
+        then: "The business should be created successfully"
+        createdbusiness != null
+        createdbusiness.get(0).getName().equals(businessToBeCreated.get(0).getName())
+        createdbusiness.get(0).getId().equals(randomUUID)
+    }
+
 }
