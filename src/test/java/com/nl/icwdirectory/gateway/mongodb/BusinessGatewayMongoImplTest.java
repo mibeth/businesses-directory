@@ -79,6 +79,15 @@ public final class BusinessGatewayMongoImplTest {
         assertEquals("Granny's clothing", allBusinesses.getContent().get(0).getName());
     }
 
+    @Test
+    public void shouldCreateBusinessesFromFile() {
+        List<Business> sampleTestingBusiness = List.of(buildSampleBusiness());
+        List<Business> result = businessGatewayMongoImpl.createFromFile(sampleTestingBusiness);
+
+        assertEquals(sampleTestingBusiness, result);
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+    }
     private Business buildSampleBusiness() {
         return Business.builder()
                 .name("Granny's clothing")
