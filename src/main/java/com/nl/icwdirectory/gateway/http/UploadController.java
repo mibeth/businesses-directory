@@ -10,7 +10,8 @@ import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.ui.Model;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -31,12 +32,13 @@ public class UploadController {
     private final CreateBusiness createBusiness;
 
     @PostMapping(URLMapping.UPLOAD_CSV_FILE)
-    public String uploadCSVFile(@RequestParam("file") MultipartFile file, Model model) {
+    public ResponseEntity<String> uploadCSVFile(@RequestParam("file") MultipartFile file) {
 
         // validate file
         if (file.isEmpty()) {
-            model.addAttribute("message", "Please select a CSV file to upload.");
-            model.addAttribute("status", false);
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("The CSV file cannot be empty");
         } else {
 
             // parse CSV file to create a list of `Business` objects
@@ -59,17 +61,16 @@ public class UploadController {
                 createBusiness.createFromFile(
                         businessJson.stream().map(jsonToBusinessConverter::convert).collect(Collectors.toList()));
 
-                // save businesses list on model
-                model.addAttribute("businesses", businessJson);
-                model.addAttribute("status", true);
-
             } catch (Exception ex) {
-                model.addAttribute("message", "An error occurred while processing the CSV file.");
-                model.addAttribute("status", false);
+                return ResponseEntity
+                        .status(HttpStatus.BAD_REQUEST)
+                        .body("An error occurred while processing the CSV file. ".concat(ex.getMessage()));
             }
         }
 
-        return "file-upload-status";
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body("Businesses successfully created");
     }
 
 }
