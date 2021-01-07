@@ -5,7 +5,7 @@ import com.nl.icwdirectory.gateway.BusinessGateway
 import org.mockito.Mockito
 import spock.lang.Specification
 
-class DeleteBusinessSpec extends Specification{
+class DeleteBusinessSpec extends Specification {
     BusinessGateway businessGateway = Mock(BusinessGateway.class)
     DeleteBusiness deleteBusiness
 

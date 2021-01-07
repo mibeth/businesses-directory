@@ -24,7 +24,7 @@ class CreateBusinessSpec extends Specification {
                 .name("Granny's clothing")
                 .ownerFirstName("Satan")
                 .email("klerengekste@gmail.com")
-                .phone("0629795318")
+                .phone("+31629795318")
                 .address(Address.builder()
                         .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
                         .build())
@@ -51,9 +51,9 @@ class CreateBusinessSpec extends Specification {
 
         then: "The business should be created successfully"
         createdbusiness != null
-        createdbusiness.getName().equals(businessToBeCreated.getName())
-        createdbusiness.getEmail().equals(businessToBeCreated.getEmail())
-        createdbusiness.getId().equals(randomUUID)
+        createdbusiness.getName() == businessToBeCreated.getName()
+        createdbusiness.getEmail() == businessToBeCreated.getEmail()
+        createdbusiness.getId() == randomUUID
     }
 
     def "Should throw Exception due to null object"() {
@@ -66,11 +66,9 @@ class CreateBusinessSpec extends Specification {
         then: "It should throw an exception"
         def e = thrown(IllegalArgumentException)
         e.message == "The business object must be defined"
-
-
     }
 
-    def "Check if phone is null to throw exception"() {
+    def "Check if phone format is invalid to throw exception"() {
         given: "a business with all required data"
         Business businessToBeCreated = Business.builder()
                 .name("Granny's clothing")
@@ -79,6 +77,7 @@ class CreateBusinessSpec extends Specification {
                 .address(Address.builder()
                         .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
                         .build())
+                .phone("(+31)6435678")
                 .build()
 
         when: "try to create an business"
@@ -86,10 +85,10 @@ class CreateBusinessSpec extends Specification {
 
         then: "an Exception should be thrown"
         def exception = thrown(InvalidPhoneException)
-        exception.message == "The phone number can't be null"
+        exception.message == "The phone number format is invalid"
     }
 
-    def "This test verifies that telephone is not null"() {
+    def "This test verifies that phone is not null"() {
         given: "Given a business to be created"
         Business businessToBeCreated = Business.builder()
                 .name("Granny's clothing")
@@ -104,8 +103,8 @@ class CreateBusinessSpec extends Specification {
         createBusiness.createBusiness(businessToBeCreated)
 
         then: "then should throw an exception"
-        def exception = thrown(InvalidPhoneException)
-        exception.message == "The phone number can't be null"
+        def exception = thrown(IllegalArgumentException)
+        exception.message == "The Business phone number must be defined"
     }
 
     def "test create business from file"() {

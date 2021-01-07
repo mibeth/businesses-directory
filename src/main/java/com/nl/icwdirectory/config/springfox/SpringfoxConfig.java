@@ -21,36 +21,36 @@ import static org.springframework.http.HttpStatus.*;
 @EnableSwagger2
 public class SpringfoxConfig {
 
-  @Bean
-  public Docket gatewayApi() {
-    return new Docket(DocumentationType.SWAGGER_2)
-        .select()
-        .apis(RequestHandlerSelectors.any())
-        .paths(PathSelectors.regex("/api/.*"))
-        .build()
-        .pathMapping("/")
-        .useDefaultResponseMessages(false)
-        .globalResponseMessage(RequestMethod.POST, defaultErrorsMessage())
-        .apiInfo(apiInfo());
-  }
+    @Bean
+    public Docket gatewayApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(PathSelectors.regex("/api/.*"))
+                .build()
+                .pathMapping("/")
+                .useDefaultResponseMessages(false)
+                .globalResponseMessage(RequestMethod.POST, defaultErrorsMessage())
+                .apiInfo(apiInfo());
+    }
 
-  private List<ResponseMessage> defaultErrorsMessage() {
-    return List.of(
-        new ResponseMessageBuilder().code(INTERNAL_SERVER_ERROR.value())
-            .message("Server error while processing request").build(),
-        new ResponseMessageBuilder().code(NOT_FOUND.value())
-            .message("Data not found for the input parameters").build(),
-        new ResponseMessageBuilder().code(BAD_REQUEST.value())
-            .message("Invalid request performed").build()
-    );
-  }
+    private List<ResponseMessage> defaultErrorsMessage() {
+        return List.of(
+                new ResponseMessageBuilder().code(INTERNAL_SERVER_ERROR.value())
+                        .message("Server error while processing request").build(),
+                new ResponseMessageBuilder().code(NOT_FOUND.value())
+                        .message("Data not found for the input parameters").build(),
+                new ResponseMessageBuilder().code(BAD_REQUEST.value())
+                        .message("Invalid request performed").build()
+        );
+    }
 
-  private ApiInfo apiInfo() {
-    return new ApiInfoBuilder()
-        .title("International Creative Woman Directory")
-        .description("Applicaton for businesses's directory management")
-        .version("1.0")
-        .build();
-  }
+    private ApiInfo apiInfo() {
+        return new ApiInfoBuilder()
+                .title("International Creative Woman Directory")
+                .description("Applicaton for businesses's directory management")
+                .version("1.0")
+                .build();
+    }
 
 }

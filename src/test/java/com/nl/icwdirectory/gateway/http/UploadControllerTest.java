@@ -1,36 +1,25 @@
 package com.nl.icwdirectory.gateway.http;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.nl.icwdirectory.domain.Address;
-import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.http.converter.CsvToJsonConverter;
 import com.nl.icwdirectory.gateway.http.converter.JsonToBusinessConverter;
 import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
-import org.apache.commons.compress.utils.IOUtils;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.Collections;
-import java.util.List;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-@RunWith(MockitoJUnitRunner.class)
-public class UploadControllerTest {
+@ExtendWith(MockitoExtension.class)
+final class UploadControllerTest {
     private CsvToJsonConverter csvToJsonConverter;
     private JsonToBusinessConverter jsonToBusinessConverter;
     private CreateBusiness createBusiness;
@@ -38,8 +27,8 @@ public class UploadControllerTest {
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         jsonToBusinessConverter = mock(JsonToBusinessConverter.class);
         csvToJsonConverter = mock(CsvToJsonConverter.class);
         createBusiness = mock(CreateBusiness.class);
@@ -52,7 +41,7 @@ public class UploadControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestDueToEmptyFile() throws Exception {
+    void shouldReturnBadRequestDueToEmptyFile() throws Exception {
         // GIVEN a file with businesses to be created
         MockMultipartFile uploadedFile = new MockMultipartFile("empty.csv",
                 "empty.csv", "text/plain",

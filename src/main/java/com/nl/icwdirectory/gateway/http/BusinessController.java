@@ -12,6 +12,7 @@ import com.nl.icwdirectory.usecase.GetBusinesses;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -29,6 +30,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Slf4j
+@RequiredArgsConstructor
 final class BusinessController {
 
     private final JsonToBusinessConverter jsonToBusinessConverter;
@@ -39,19 +41,6 @@ final class BusinessController {
 
     @Value("${elements.per.page}")
     private Integer elementsPerPage;
-
-    public BusinessController(
-            JsonToBusinessConverter jsonToBusinessConverter,
-            BusinessToJsonConverter businessToJsonConverter,
-            DeleteBusiness deleteBusiness,
-            CreateBusiness createBusiness,
-            GetBusinesses getBusinesses) {
-        this.jsonToBusinessConverter = jsonToBusinessConverter;
-        this.businessToJsonConverter = businessToJsonConverter;
-        this.deleteBusiness = deleteBusiness;
-        this.createBusiness = createBusiness;
-        this.getBusinesses = getBusinesses;
-    }
 
     @ApiOperation(value = "Delete a Business")
     @ApiResponses(value = {

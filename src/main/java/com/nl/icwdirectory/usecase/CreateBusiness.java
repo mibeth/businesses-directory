@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 import static org.springframework.util.Assert.notNull;
 
@@ -14,7 +15,10 @@ import static org.springframework.util.Assert.notNull;
 @Slf4j
 public class CreateBusiness {
 
-    private static final String PHONE_CANT_BE_NULL = "The phone number can't be null";
+    private static final String PHONE_PATTERNS
+            = "^\\d{10}$" //Ten digit number
+            + "|^(\\+\\d{1,2})?\\d{9}$"; //Starting by +
+    private static final Pattern VALID_PHONE = Pattern.compile(PHONE_PATTERNS);
     private final BusinessGateway businessGateway;
 
     public CreateBusiness(final BusinessGateway businessGateway) {
@@ -37,8 +41,11 @@ public class CreateBusiness {
         notNull(businessToBeCreated.getName(), "The Business name must be defined");
         notNull(businessToBeCreated.getOwnerFirstName(), "The Business owner name must be defined");
         notNull(businessToBeCreated.getEmail(), "The Business email must be defined");
-        if (businessToBeCreated.getPhone() == null) {
-            throw new InvalidPhoneException(PHONE_CANT_BE_NULL);
+        notNull(businessToBeCreated.getPhone(), "The Business phone number must be defined");
+
+        if (!VALID_PHONE.matcher(businessToBeCreated.getPhone().replace(" ", "")).matches()) {
+            throw new InvalidPhoneException("The phone number format is invalid");
         }
     }
+
 }

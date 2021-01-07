@@ -88,6 +88,7 @@ public final class BusinessGatewayMongoImplTest {
         assertNotNull(result);
         assertFalse(result.isEmpty());
     }
+
     private Business buildSampleBusiness() {
         return Business.builder()
                 .name("Granny's clothing")

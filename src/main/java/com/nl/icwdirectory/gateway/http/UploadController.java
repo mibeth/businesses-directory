@@ -27,6 +27,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class UploadController {
+    private static final char SEMICOLON_DELIMETER = ';';
     private final CsvToJsonConverter csvToJsonConverter;
     private final JsonToBusinessConverter jsonToBusinessConverter;
     private final CreateBusiness createBusiness;
@@ -40,11 +41,9 @@ public class UploadController {
                     .status(HttpStatus.BAD_REQUEST)
                     .body("The CSV file cannot be empty");
         } else {
-
             // parse CSV file to create a list of `Business` objects
             try (Reader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
                 // create csv bean reader
-                char SEMICOLON_DELIMETER = ';';
                 CsvToBean<CsvBusiness> csvToBean = new CsvToBeanBuilder<CsvBusiness>(reader)
                         .withSeparator(SEMICOLON_DELIMETER)
                         .withType(CsvBusiness.class)
@@ -57,10 +56,10 @@ public class UploadController {
                 List<CsvBusiness> businesses = csvToBean.parse();
                 List<CreateBusinessJson> businessJson =
                         businesses.stream().map(csvToJsonConverter::convert).collect(Collectors.toList());
+
                 log.info("Saving csv file content to DB");
                 createBusiness.createFromFile(
                         businessJson.stream().map(jsonToBusinessConverter::convert).collect(Collectors.toList()));
-
             } catch (Exception ex) {
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)

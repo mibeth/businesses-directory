@@ -28,12 +28,12 @@ public class CsvToJsonConverter implements Converter<CsvBusiness, CreateBusiness
                 .website(source.getWebsite())
                 .phone(source.getPhone())
                 .logo(source.getLogo())
-                .images(StringUtils.isNotEmpty(source.getImages())?
-                        List.of(source.getImages().split(",")):
+                .images(StringUtils.isNotEmpty(source.getImages()) ?
+                        List.of(source.getImages().split(",")) :
                         Collections.emptyList())
                 .description(source.getDescription())
-                .tags(StringUtils.isNotEmpty(source.getTags())?
-                        List.of(source.getTags().split(",")):
+                .tags(StringUtils.isNotEmpty(source.getTags()) ?
+                        List.of(source.getTags().split(",")) :
                         Collections.emptyList())
                 .build();
     }
