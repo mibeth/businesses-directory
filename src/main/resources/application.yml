@@ -1,0 +1,14 @@
+spring:
+  main:
+    banner-mode: "off"
+  #data:
+  #  mongodb:
+  #    uri: #dbUri
+  #    database: #dbName
+
+elements.per.page: 6
+
+springdoc:
+  swagger-ui:
+    disable-swagger-default-url: true
+    pathsToMatch: "/directory/*"
