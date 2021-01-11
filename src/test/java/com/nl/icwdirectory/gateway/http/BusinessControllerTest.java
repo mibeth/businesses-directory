@@ -41,6 +41,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @RunWith(MockitoJUnitRunner.class)
 public final class BusinessControllerTest {
 
+    private static final String PATH_MAPPING = "/directory";
     private JsonToBusinessConverter jsonToBusinessConverter;
     private BusinessToJsonConverter businessToJsonConverter;
     private DeleteBusiness deleteBusiness;
@@ -73,8 +74,8 @@ public final class BusinessControllerTest {
         String businessId = "5ec2f3cb71db2a7c13beb4fd";
 
         // WHEN I try to consume the endpoint to delete a business
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(URLMapping.DELETE_BUSINESS, businessId)
-        .contentType(APPLICATION_JSON))
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(PATH_MAPPING.concat(URLMapping.DELETE_BUSINESS), businessId)
+                .contentType(APPLICATION_JSON))
                 .andReturn();
 
         // THEN It should delete a business
@@ -109,7 +110,7 @@ public final class BusinessControllerTest {
         when(createBusiness.createBusiness(any())).thenReturn(createdBusiness);
 
         // WHEN I try to consume the endpoint to create a new user
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(URLMapping.CREATE_NEW_BUSINESS)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS))
                 .content(objectMapper.writeValueAsString(businessToBeCreated))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -144,7 +145,7 @@ public final class BusinessControllerTest {
                 .build();
 
         // WHEN I try to consume the endpoint to create a new user
-        mockMvc.perform(post(URLMapping.CREATE_NEW_BUSINESS)
+        mockMvc.perform(post(PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS))
                 .content(objectMapper.writeValueAsString(businessToBeCreated))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -158,8 +159,8 @@ public final class BusinessControllerTest {
     @Test
     public void shouldValidateIfURLChanged() {
         // If the URL changes it could break clients. This test will inform that in case of URL changes
-        String expected = "/api/business";
-        String actual = URLMapping.CREATE_NEW_BUSINESS;
+        String expected = "/directory/business";
+        String actual = PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS);
         assertEquals(expected, actual);
     }
 
@@ -170,7 +171,7 @@ public final class BusinessControllerTest {
         when(getBusinesses.getAllBusinesses(any())).thenReturn(Page.empty());
         when(businessToJsonConverter.convert(anyList())).thenCallRealMethod();
 
-        MvcResult mvcResult = mockMvc.perform(get(URLMapping.GET_BUSINESSES)
+        MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
                 .queryParam("pageNumber", String.valueOf(0))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -212,7 +213,7 @@ public final class BusinessControllerTest {
         when(businessToJsonConverter.convert(any(Business.class))).thenCallRealMethod();
         when(businessToJsonConverter.convert(anyList())).thenCallRealMethod();
 
-        MvcResult mvcResult = mockMvc.perform(get(URLMapping.GET_BUSINESSES)
+        MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
                 .param("pageNumber", String.valueOf(0))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())

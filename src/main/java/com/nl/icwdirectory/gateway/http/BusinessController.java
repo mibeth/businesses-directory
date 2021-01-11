@@ -1,6 +1,5 @@
 package com.nl.icwdirectory.gateway.http;
 
-import com.google.common.collect.Lists;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.http.converter.BusinessToJsonConverter;
 import com.nl.icwdirectory.gateway.http.converter.JsonToBusinessConverter;
@@ -10,9 +9,10 @@ import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
 import com.nl.icwdirectory.usecase.DeleteBusiness;
 import com.nl.icwdirectory.usecase.GetBusinesses;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiResponse;
-import io.swagger.annotations.ApiResponses;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -29,6 +29,8 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @Slf4j
+@RequestMapping("/directory")
+@RequiredArgsConstructor
 final class BusinessController {
 
     private final JsonToBusinessConverter jsonToBusinessConverter;
@@ -40,25 +42,12 @@ final class BusinessController {
     @Value("${elements.per.page}")
     private Integer elementsPerPage;
 
-    public BusinessController(
-            JsonToBusinessConverter jsonToBusinessConverter,
-            BusinessToJsonConverter businessToJsonConverter,
-            DeleteBusiness deleteBusiness,
-            CreateBusiness createBusiness,
-            GetBusinesses getBusinesses) {
-        this.jsonToBusinessConverter = jsonToBusinessConverter;
-        this.businessToJsonConverter = businessToJsonConverter;
-        this.deleteBusiness = deleteBusiness;
-        this.createBusiness = createBusiness;
-        this.getBusinesses = getBusinesses;
-    }
-
-    @ApiOperation(value = "Delete a Business")
+    @Operation(summary = "Delete a Business")
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Executed business delete operation")
+            @ApiResponse(responseCode = "204", description = "Executed business delete operation")
     })
-    @DeleteMapping(value = URLMapping.DELETE_BUSINESS)
-    public ResponseEntity<BusinessJson> deleteBusinessById(@PathVariable String id){
+    @DeleteMapping(URLMapping.DELETE_BUSINESS)
+    public ResponseEntity<BusinessJson> deleteBusinessById(@PathVariable String id) {
         log.info("Deleting Business id {}", id);
         deleteBusiness.deleteById(id);
         return ResponseEntity
@@ -66,10 +55,10 @@ final class BusinessController {
                 .build();
     }
 
-    @ApiOperation(value = "Create a new Business")
+    @Operation(summary = "Create a new Business")
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "Business successfully created"),
-            @ApiResponse(code = 400, message = "Bad request")
+            @ApiResponse(responseCode = "201", description = "Business successfully created"),
+            @ApiResponse(responseCode = "400", description = "Bad request")
     })
     @PostMapping(value = URLMapping.CREATE_NEW_BUSINESS,
             produces = APPLICATION_JSON_VALUE,
@@ -86,12 +75,14 @@ final class BusinessController {
                 .body(businessToJsonConverter.convert(businessCreated));
     }
 
-    @GetMapping(value = URLMapping.GET_BUSINESSES)
+    @Operation(summary = "Gets all registered businesses")
+    @GetMapping(URLMapping.GET_BUSINESSES)
     public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam final int pageNumber) {
         final Page<Business> businesses = getBusinesses.getAllBusinesses(
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
 
         return ResponseEntity.ok(
-                businessToJsonConverter.convert(Lists.newArrayList(businesses)));
+                businessToJsonConverter.convert(businesses.getContent()));
     }
+
 }
