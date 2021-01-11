@@ -3,6 +3,7 @@ package com.nl.icwdirectory.gateway.mongodb;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.BusinessGateway;
 import com.nl.icwdirectory.gateway.mongodb.repository.BusinessRepository;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,13 +13,10 @@ import java.util.List;
 
 @Component
 @Slf4j
+@RequiredArgsConstructor
 public final class BusinessGatewayMongoImpl implements BusinessGateway {
 
     private final BusinessRepository businessRepository;
-
-    public BusinessGatewayMongoImpl(BusinessRepository businessRepository) {
-        this.businessRepository = businessRepository;
-    }
 
     @Override
     public void delete(String businessIdToBeDeleted) {

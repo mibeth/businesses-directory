@@ -3,6 +3,7 @@ package com.nl.icwdirectory.usecase;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.domain.exception.InvalidPhoneException;
 import com.nl.icwdirectory.gateway.BusinessGateway;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import static org.springframework.util.Assert.notNull;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class CreateBusiness {
 
     private static final String PHONE_PATTERNS
@@ -20,10 +22,6 @@ public class CreateBusiness {
             + "|^(\\+\\d{1,2})?\\d{9}$"; //Starting by +
     private static final Pattern VALID_PHONE = Pattern.compile(PHONE_PATTERNS);
     private final BusinessGateway businessGateway;
-
-    public CreateBusiness(final BusinessGateway businessGateway) {
-        this.businessGateway = businessGateway;
-    }
 
     public Business createBusiness(final Business businessToBeCreated) {
         validateBusiness(businessToBeCreated);
