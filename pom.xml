@@ -32,7 +32,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <spock-spring.version>2.0-M4-groovy-2.5</spock-spring.version>
         <spotbugs-annotations.version>4.2.0</spotbugs-annotations.version>
-        <springfox-swagger2.version>2.9.2</springfox-swagger2.version>
+        <springdoc-openapi-ui.version>1.5.1</springdoc-openapi-ui.version>
         <maven.version>3.6</maven.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <opencsv.version>5.3</opencsv.version>
@@ -79,15 +79,9 @@
 
         <!--Swagger dependencies -->
         <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger2.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>${springfox-swagger2.version}</version>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc-openapi-ui.version}</version>
         </dependency>
 
         <!-- MongoDB in memory for integration tests-->
@@ -147,7 +141,6 @@
             <artifactId>opencsv</artifactId>
             <version>${opencsv.version}</version>
         </dependency>
-
     </dependencies>
 
     <build>

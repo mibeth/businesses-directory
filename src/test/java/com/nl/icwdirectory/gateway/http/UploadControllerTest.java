@@ -44,7 +44,7 @@ final class UploadControllerTest {
     void shouldReturnBadRequestDueToEmptyFile() throws Exception {
         // GIVEN a file with businesses to be created
         MockMultipartFile uploadedFile = new MockMultipartFile("empty.csv",
-                "empty.csv", "text/plain",
+                "empty.csv", "text/csv",
                 //UploadController.class.getClassLoader().getResourceAsStream("empty.csv"));
                 "".getBytes());
 

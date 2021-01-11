@@ -8,6 +8,7 @@ import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
 import com.opencsv.bean.CsvToBean;
 import com.opencsv.bean.CsvToBeanBuilder;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,9 @@ import java.io.Reader;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
+
 @RestController
 @RequiredArgsConstructor
 @Slf4j
@@ -32,8 +36,11 @@ public class UploadController {
     private final JsonToBusinessConverter jsonToBusinessConverter;
     private final CreateBusiness createBusiness;
 
-    @PostMapping(URLMapping.UPLOAD_CSV_FILE)
-    public ResponseEntity<String> uploadCSVFile(@RequestParam("file") MultipartFile file) {
+    @Operation(summary = "Creates businesses from CSV file")
+    @PostMapping(value = URLMapping.UPLOAD_CSV_FILE,
+            produces = APPLICATION_JSON_VALUE,
+            consumes = MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> uploadCSVFile(@RequestParam("file") final MultipartFile file) {
 
         // validate file
         if (file.isEmpty()) {

@@ -1,17 +1,14 @@
 package com.nl.icwdirectory.gateway.http.json;
 
 import com.nl.icwdirectory.domain.Address;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
 @Builder
 public final class CreateBusinessJson {
 

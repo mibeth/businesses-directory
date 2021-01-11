@@ -45,6 +45,7 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @AutoConfigureMockMvc
 final class BusinessControllerTest {
 
+    private static final String PATH_MAPPING = "/directory";
     private JsonToBusinessConverter jsonToBusinessConverter;
     private BusinessToJsonConverter businessToJsonConverter;
     private DeleteBusiness deleteBusiness;
@@ -79,7 +80,7 @@ final class BusinessControllerTest {
         String businessId = "5ec2f3cb71db2a7c13beb4fd";
 
         // WHEN I try to consume the endpoint to delete a business
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(URLMapping.DELETE_BUSINESS, businessId)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.delete(PATH_MAPPING.concat(URLMapping.DELETE_BUSINESS), businessId)
                 .contentType(APPLICATION_JSON))
                 .andReturn();
 
@@ -115,7 +116,7 @@ final class BusinessControllerTest {
         when(createBusiness.createBusiness(any())).thenReturn(createdBusiness);
 
         // WHEN I try to consume the endpoint to create a new user
-        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(URLMapping.CREATE_NEW_BUSINESS)
+        MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS))
                 .content(objectMapper.writeValueAsString(businessToBeCreated))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isCreated())
@@ -150,7 +151,7 @@ final class BusinessControllerTest {
                 .build();
 
         // WHEN I try to consume the endpoint to create a new user
-        mockMvc.perform(post(URLMapping.CREATE_NEW_BUSINESS)
+        mockMvc.perform(post(PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS))
                 .content(objectMapper.writeValueAsString(businessToBeCreated))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isBadRequest())
@@ -164,8 +165,8 @@ final class BusinessControllerTest {
     @Test
     void shouldValidateIfURLChanged() {
         // If the URL changes it could break clients. This test will inform that in case of URL changes
-        String expected = "/api/business";
-        String actual = URLMapping.CREATE_NEW_BUSINESS;
+        String expected = "/directory/business";
+        String actual = PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS);
         assertEquals(expected, actual);
     }
 
@@ -175,7 +176,7 @@ final class BusinessControllerTest {
 
         when(getBusinesses.getAllBusinesses(any())).thenReturn(Page.empty());
 
-        MvcResult mvcResult = mockMvc.perform(get(URLMapping.GET_BUSINESSES)
+        MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
                 .queryParam("pageNumber", String.valueOf(0))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -215,7 +216,7 @@ final class BusinessControllerTest {
         when(getBusinesses.getAllBusinesses(any(PageRequest.class))).thenReturn(result);
         when(businessToJsonConverter.convert(any())).thenCallRealMethod();
 
-        MvcResult mvcResult = mockMvc.perform(get(URLMapping.GET_BUSINESSES)
+        MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
                 .param("pageNumber", String.valueOf(0))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -224,8 +225,7 @@ final class BusinessControllerTest {
 
         // THEN It should return a result list with values in it
         String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {
-        });
+        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {});
 
         assertNotNull(mvcResult.getResponse());
         assertEquals(expectedResult, businessFromResponse);

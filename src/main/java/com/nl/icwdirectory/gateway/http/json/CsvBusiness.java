@@ -8,7 +8,6 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-@Setter
 @Builder
 public final class CsvBusiness {
     @CsvBindByName(column = "business_name")
