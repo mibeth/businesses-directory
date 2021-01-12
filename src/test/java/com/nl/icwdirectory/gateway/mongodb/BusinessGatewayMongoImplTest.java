@@ -2,9 +2,9 @@ package com.nl.icwdirectory.gateway.mongodb;
 
 import com.nl.icwdirectory.domain.Address;
 import com.nl.icwdirectory.domain.Business;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
@@ -13,17 +13,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.Assert.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @DataMongoTest
 @ComponentScan(basePackageClasses = BusinessGatewayMongoImpl.class)
-public final class BusinessGatewayMongoImplTest {
+final class BusinessGatewayMongoImplTest {
 
     @Autowired
     private BusinessGatewayMongoImpl businessGatewayMongoImpl;
@@ -31,14 +31,14 @@ public final class BusinessGatewayMongoImplTest {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         // Clean all data before each test
         mongoTemplate.findAllAndRemove(new Query(), Business.class);
     }
 
     @Test
-    public void shouldDeleteABusiness() {
+    void shouldDeleteABusiness() {
         Business business = mongoTemplate.insert(buildSampleBusiness());
         List<Business> businessList = mongoTemplate.findAll(Business.class);
         assertEquals(1, businessList.size());
@@ -47,7 +47,7 @@ public final class BusinessGatewayMongoImplTest {
     }
 
     @Test
-    public void shouldCreateANewBusiness() {
+    void shouldCreateANewBusiness() {
         Business sampleTestingBusiness = buildSampleBusiness();
         Business result = businessGatewayMongoImpl.create(sampleTestingBusiness);
 
@@ -56,7 +56,7 @@ public final class BusinessGatewayMongoImplTest {
     }
 
     @Test
-    public void shouldReturnEmptyResultWhenNoRecordsFound() {
+    void shouldReturnEmptyResultWhenNoRecordsFound() {
         Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
                 PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
         );
@@ -66,7 +66,7 @@ public final class BusinessGatewayMongoImplTest {
     }
 
     @Test
-    public void shouldReturnPagedResultOnRequest() {
+    void shouldReturnPagedResultOnRequest() {
         Business sampleTestingBusiness = buildSampleBusiness();
         mongoTemplate.insert(sampleTestingBusiness);
 
@@ -77,6 +77,16 @@ public final class BusinessGatewayMongoImplTest {
         assertNotNull(allBusinesses);
         assertEquals(1, allBusinesses.getTotalElements());
         assertEquals("Granny's clothing", allBusinesses.getContent().get(0).getName());
+    }
+
+    @Test
+    void shouldCreateBusinessesFromFile() {
+        List<Business> sampleTestingBusiness = List.of(buildSampleBusiness());
+        List<Business> result = businessGatewayMongoImpl.createFromFile(sampleTestingBusiness);
+
+        assertEquals(sampleTestingBusiness, result);
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
     }
 
     private Business buildSampleBusiness() {
@@ -96,4 +106,5 @@ public final class BusinessGatewayMongoImplTest {
                 .tags(List.of("clothing", "kleren"))
                 .build();
     }
+
 }

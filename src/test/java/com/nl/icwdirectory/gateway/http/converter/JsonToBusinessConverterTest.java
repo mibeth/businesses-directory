@@ -3,25 +3,25 @@ package com.nl.icwdirectory.gateway.http.converter;
 import com.nl.icwdirectory.domain.Address;
 import com.nl.icwdirectory.domain.Business;
 import com.nl.icwdirectory.gateway.http.json.CreateBusinessJson;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public final class JsonToBusinessConverterTest {
+final class JsonToBusinessConverterTest {
 
     private JsonToBusinessConverter jsonToBusinessConverter;
 
-    @Before
-    public void setupTest() {
+    @BeforeEach
+    void setupTest() {
         jsonToBusinessConverter = new JsonToBusinessConverter();
     }
 
     @Test
-    public void shouldConvertCreateUserJsonToUser() {
+    void shouldConvertCreateUserJsonToUser() {
         CreateBusinessJson businessToConvert = CreateBusinessJson.builder()
                 .name("Granny's clothing")
                 .ownerFirstName("Satan")

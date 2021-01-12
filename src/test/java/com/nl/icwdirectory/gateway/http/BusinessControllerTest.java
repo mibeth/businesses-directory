@@ -12,10 +12,12 @@ import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
 import com.nl.icwdirectory.usecase.DeleteBusiness;
 import com.nl.icwdirectory.usecase.GetBusinesses;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -24,13 +26,14 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -38,8 +41,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standaloneSetup;
 
-@RunWith(MockitoJUnitRunner.class)
-public final class BusinessControllerTest {
+@ExtendWith(MockitoExtension.class)
+@AutoConfigureMockMvc
+final class BusinessControllerTest {
 
     private static final String PATH_MAPPING = "/directory";
     private JsonToBusinessConverter jsonToBusinessConverter;
@@ -50,9 +54,11 @@ public final class BusinessControllerTest {
     private BusinessController businessController;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
+    @Autowired
+    WebApplicationContext wac;
 
-    @Before
-    public void setUp() {
+    @BeforeEach
+    void setUp() {
         jsonToBusinessConverter = mock(JsonToBusinessConverter.class);
         businessToJsonConverter = mock(BusinessToJsonConverter.class);
         deleteBusiness = mock(DeleteBusiness.class);
@@ -69,7 +75,7 @@ public final class BusinessControllerTest {
     }
 
     @Test
-    public void shouldDeleteBusinessById() throws Exception {
+    void shouldDeleteBusinessById() throws Exception {
         // GIVEN a Business Id to be deleted
         String businessId = "5ec2f3cb71db2a7c13beb4fd";
 
@@ -84,7 +90,7 @@ public final class BusinessControllerTest {
     }
 
     @Test
-    public void shouldCreateNewUser() throws Exception {
+    void shouldCreateNewUser() throws Exception {
         // GIVEN a business to be created
         CreateBusinessJson businessToBeCreated = CreateBusinessJson.builder()
                 .name("Granny's clothing")
@@ -127,7 +133,7 @@ public final class BusinessControllerTest {
     }
 
     @Test
-    public void shouldReturnBadRequestDueToMissingParameters() throws Exception {
+    void shouldReturnBadRequestDueToMissingParameters() throws Exception {
         // GIVEN a user to be created
         Business businessToBeCreated = Business.builder()
                 .name("Granny's clothing")
@@ -157,7 +163,7 @@ public final class BusinessControllerTest {
     }
 
     @Test
-    public void shouldValidateIfURLChanged() {
+    void shouldValidateIfURLChanged() {
         // If the URL changes it could break clients. This test will inform that in case of URL changes
         String expected = "/directory/business";
         String actual = PATH_MAPPING.concat(URLMapping.CREATE_NEW_BUSINESS);
@@ -165,11 +171,10 @@ public final class BusinessControllerTest {
     }
 
     @Test
-    public void shouldReturnEmptyResultWhenNoRecordsFound() throws Exception {
+    void shouldReturnEmptyResultWhenNoRecordsFound() throws Exception {
         ReflectionTestUtils.setField(businessController, "elementsPerPage", 6);
 
         when(getBusinesses.getAllBusinesses(any())).thenReturn(Page.empty());
-        when(businessToJsonConverter.convert(anyList())).thenCallRealMethod();
 
         MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
                 .queryParam("pageNumber", String.valueOf(0))
@@ -180,11 +185,10 @@ public final class BusinessControllerTest {
         assertNotNull(mvcResult.getResponse());
         assertEquals("[]", mvcResult.getResponse().getContentAsString());
         verify(getBusinesses).getAllBusinesses(any());
-        verify(businessToJsonConverter).convert(anyList());
     }
 
     @Test
-    public void shouldReturnPagedResultOnRequest() throws Exception {
+    void shouldReturnPagedResultOnRequest() throws Exception {
         ReflectionTestUtils.setField(businessController, "elementsPerPage", 6);
 
         PageImpl<Business> result = new PageImpl<>(List.of(Business.builder()
@@ -210,8 +214,7 @@ public final class BusinessControllerTest {
                 .build());
 
         when(getBusinesses.getAllBusinesses(any(PageRequest.class))).thenReturn(result);
-        when(businessToJsonConverter.convert(any(Business.class))).thenCallRealMethod();
-        when(businessToJsonConverter.convert(anyList())).thenCallRealMethod();
+        when(businessToJsonConverter.convert(any())).thenCallRealMethod();
 
         MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
                 .param("pageNumber", String.valueOf(0))
@@ -227,6 +230,7 @@ public final class BusinessControllerTest {
         assertNotNull(mvcResult.getResponse());
         assertEquals(expectedResult, businessFromResponse);
         verify(getBusinesses).getAllBusinesses(any());
-        verify(businessToJsonConverter).convert(anyList());
+        verify(businessToJsonConverter).convert(any());
     }
+
 }

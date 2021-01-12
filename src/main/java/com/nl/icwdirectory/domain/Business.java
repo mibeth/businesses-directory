@@ -8,6 +8,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import javax.validation.constraints.Email;
 import java.util.List;
 
 @AllArgsConstructor
@@ -26,6 +27,7 @@ public final class Business {
     @Field(name = "owner_last_name")
     private String ownerLastName;
     private Address address;
+    @Email
     private String email;
     private String website;
     private String phone;

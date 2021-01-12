@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
@@ -82,7 +83,7 @@ final class BusinessController {
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
 
         return ResponseEntity.ok(
-                businessToJsonConverter.convert(businesses.getContent()));
+                businesses.stream().map(businessToJsonConverter::convert).collect(toUnmodifiableList()));
     }
 
 }
