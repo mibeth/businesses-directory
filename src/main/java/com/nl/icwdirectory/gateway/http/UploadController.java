@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -68,9 +69,11 @@ public class UploadController {
                 createBusiness.createFromFile(
                         businessJson.stream().map(jsonToBusinessConverter::convert).collect(Collectors.toList()));
             } catch (Exception ex) {
+                final var responseBody = new StringBuilder("An error occurred while processing the CSV file.");
+                Arrays.stream(ex.getSuppressed()).forEach(suppressed -> responseBody.append("\n".concat(suppressed.getMessage())));
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
-                        .body("An error occurred while processing the CSV file. ".concat(ex.getMessage()));
+                        .body(responseBody.toString());
             }
         }
 

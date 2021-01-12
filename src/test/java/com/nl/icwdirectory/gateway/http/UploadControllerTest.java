@@ -88,4 +88,27 @@ final class UploadControllerTest {
         verify(csvToJsonConverter, only()).convert(any());
     }
 
+    @Test
+    void shouldNotifyWhenAnErrorIsThrown() throws Exception {
+        // GIVEN a file with businesses to be created
+        final var uploadedFile = new MockMultipartFile("file",
+                "empty.csv", "text/csv",
+                "data".getBytes());
+
+        when(createBusiness.createFromFile(anyList())).thenThrow(new RuntimeException("Oops!"));
+
+        // WHEN I try to consume the endpoint to upload a file
+        final var result = mockMvc.perform(MockMvcRequestBuilders.multipart(URLMapping.UPLOAD_CSV_FILE)
+                .file(uploadedFile)
+                .contentType(MediaType.MULTIPART_FORM_DATA))
+                .andExpect(status().is(400))
+                .andReturn();
+
+        assertNotNull(result);
+        assertEquals("An error occurred while processing the CSV file.", result.getResponse().getContentAsString());
+        verify(createBusiness, only()).createFromFile(anyList());
+        verifyNoInteractions(jsonToBusinessConverter);
+        verifyNoInteractions(csvToJsonConverter);
+    }
+
 }

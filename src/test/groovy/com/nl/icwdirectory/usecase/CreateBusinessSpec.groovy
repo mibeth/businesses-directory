@@ -2,7 +2,7 @@ package com.nl.icwdirectory.usecase
 
 import com.nl.icwdirectory.domain.Address
 import com.nl.icwdirectory.domain.Business
-import com.nl.icwdirectory.domain.exception.InvalidPhoneException
+import com.nl.icwdirectory.domain.exception.BusinessValidationException
 import com.nl.icwdirectory.gateway.BusinessGateway
 import spock.lang.Specification
 
@@ -84,7 +84,7 @@ class CreateBusinessSpec extends Specification {
         createBusiness.createBusiness(businessToBeCreated)
 
         then: "an Exception should be thrown"
-        def exception = thrown(InvalidPhoneException)
+        def exception = thrown(BusinessValidationException)
         exception.message == "The phone number format is invalid"
     }
 
@@ -142,6 +142,52 @@ class CreateBusinessSpec extends Specification {
         createdbusiness != null
         createdbusiness.get(0).getName().equals(businessToBeCreated.get(0).getName())
         createdbusiness.get(0).getId().equals(randomUUID)
+    }
+
+    def "test create business from file with validation error"() {
+        given: "A list of businesses to be created"
+        def businessToBeCreated = List.of(Business.builder()
+                .name("Granny's clothing")
+                .ownerFirstName("Satan")
+                .email("klerengekste@gmail.com")
+                .phone("(+31)680235")
+                .address(Address.builder()
+                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .build())
+                .build(),
+                Business.builder()
+                        .name("GrandGranny's clothing")
+                        .ownerFirstName("Say10")
+                        .email("klerengeksteAtgmail.com")
+                        .phone("0629795318")
+                        .address(Address.builder()
+                                .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                                .build())
+                        .build())
+        println "businessToBeCreated = $businessToBeCreated"
+
+        and: "a random UUID identifying the business id created"
+        def randomUUID = UUID.randomUUID().toString()
+        businessGateway.createFromFile(businessToBeCreated) >> {
+            List.of(Business.builder()
+                    .name("Granny's clothing")
+                    .ownerFirstName("Satan")
+                    .email("klerengekste@gmail.com")
+                    .phone("0629795318")
+                    .address(Address.builder()
+                            .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                            .build())
+                    .id(randomUUID)
+                    .build())
+        }
+
+        when: "I try to create the business with a list"
+        List<Business> createdbusiness = createBusiness.createFromFile(businessToBeCreated)
+
+        then: "then should throw an exception"
+        def exception = thrown(BusinessValidationException)
+        exception.message == "There were validation errors found when checking the file's content"
+        exception.getSuppressed().size() > 0
     }
 
 }

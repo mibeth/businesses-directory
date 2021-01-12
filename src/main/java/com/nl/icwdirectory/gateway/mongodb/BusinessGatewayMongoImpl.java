@@ -26,14 +26,14 @@ public final class BusinessGatewayMongoImpl implements BusinessGateway {
 
     @Override
     public Business create(final Business businessToBeCreated) {
-        Business insertedBusiness = businessRepository.insert(businessToBeCreated);
+        Business insertedBusiness = businessRepository.save(businessToBeCreated);
         log.info("Business successfully created: {}", insertedBusiness);
         return insertedBusiness;
     }
 
     @Override
     public List<Business> createFromFile(final List<Business> businessToBeCreated) {
-        List<Business> insertedBusiness = businessRepository.insert(businessToBeCreated);
+        List<Business> insertedBusiness = businessRepository.saveAll(businessToBeCreated);
         log.info("Businesses successfully created: {}", insertedBusiness);
         return insertedBusiness;
     }
