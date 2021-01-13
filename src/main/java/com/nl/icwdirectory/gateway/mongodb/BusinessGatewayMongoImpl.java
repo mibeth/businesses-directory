@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.TextCriteria;
+import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,9 +20,10 @@ import java.util.List;
 public final class BusinessGatewayMongoImpl implements BusinessGateway {
 
     private final BusinessRepository businessRepository;
+    private final MongoTemplate mongoTemplate;
 
     @Override
-    public void delete(String businessIdToBeDeleted) {
+    public void delete(final String businessIdToBeDeleted) {
         businessRepository.deleteById(businessIdToBeDeleted);
         log.info("Executed delete operation, business id {}", businessIdToBeDeleted);
     }
@@ -44,4 +48,11 @@ public final class BusinessGatewayMongoImpl implements BusinessGateway {
         log.info("All businesses queried, total records found: {}", businesses.getTotalElements());
         return businesses;
     }
+
+    @Override
+    public List<Business> getBusinessesByTagsAndName(String searchedText) {
+        final var textQuery = TextQuery.queryText(new TextCriteria().matchingAny(searchedText)).sortByScore();
+        return mongoTemplate.find(textQuery, Business.class, "businesses");
+    }
+
 }
