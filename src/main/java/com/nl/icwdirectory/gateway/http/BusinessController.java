@@ -9,6 +9,7 @@ import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
 import com.nl.icwdirectory.usecase.DeleteBusiness;
 import com.nl.icwdirectory.usecase.GetBusinesses;
+import com.nl.icwdirectory.usecase.SearchBusinesses;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -39,6 +40,7 @@ final class BusinessController {
     private final DeleteBusiness deleteBusiness;
     private final CreateBusiness createBusiness;
     private final GetBusinesses getBusinesses;
+    private final SearchBusinesses searchBusinesses;
 
     @Value("${elements.per.page}")
     private Integer elementsPerPage;
@@ -81,6 +83,15 @@ final class BusinessController {
     public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam final int pageNumber) {
         final Page<Business> businesses = getBusinesses.getAllBusinesses(
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
+
+        return ResponseEntity.ok(
+                businesses.stream().map(businessToJsonConverter::convert).collect(toUnmodifiableList()));
+    }
+
+    @Operation(summary = "Gets businesses according to inputted text")
+    @GetMapping(URLMapping.SEARCH_BUSINESSES)
+    public ResponseEntity<List<BusinessJson>> getBusinessesByTagAndName(@PathVariable final String criteria) {
+        final var businesses = searchBusinesses.getBusinessesByTagsAndName(criteria);
 
         return ResponseEntity.ok(
                 businesses.stream().map(businessToJsonConverter::convert).collect(toUnmodifiableList()));

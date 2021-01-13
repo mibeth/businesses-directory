@@ -8,12 +8,14 @@ import java.util.List;
 
 public interface BusinessGateway {
 
-    void delete(final String businessIdToBeDeleted);
+    void delete(String businessIdToBeDeleted);
 
-    Business create(final Business businessToBeCreated);
+    Business create(Business businessToBeCreated);
 
-    Page<Business> getAllBusinesses(final Pageable pageRequest);
+    Page<Business> getAllBusinesses(Pageable pageRequest);
 
     List<Business> createFromFile(List<Business> businesses);
+
+    List<Business> getBusinessesByTagsAndName(String searchedText);
 
 }

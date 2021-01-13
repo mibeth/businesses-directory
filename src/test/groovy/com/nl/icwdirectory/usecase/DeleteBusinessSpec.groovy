@@ -15,15 +15,13 @@ class DeleteBusinessSpec extends Specification {
 
     def "Should delete a business with valid id"() {
         given: "A business id to be deleted"
-        def businessGateway = Mockito.mock(BusinessGateway.class)
-        DeleteBusiness deleteBusiness = new DeleteBusiness(businessGateway)
         String businessId = UUID.randomUUID()
 
         when: "I try to delete the business"
         deleteBusiness.deleteById(businessId)
 
         then: "Verify BusinessGateway is called"
-        Mockito.verify(businessGateway).delete(businessId)
+        1 * businessGateway.delete(businessId)
     }
 
     def "Should throw Exception due to null id"() {

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.TextIndexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -21,6 +22,7 @@ public final class Business {
     @Id
     private String id;
     @Field(name = "business_name")
+    @TextIndexed
     private String name;
     @Field(name = "owner_first_name")
     private String ownerFirstName;
@@ -34,6 +36,7 @@ public final class Business {
     private String logo;
     private List<String> images;
     private String description;
+    @TextIndexed
     private List<String> tags;
 
 }

@@ -9,13 +9,9 @@ import spock.lang.Specification
 class CreateBusinessSpec extends Specification {
     BusinessGateway businessGateway = Mock(BusinessGateway.class)
     CreateBusiness createBusiness
-    GetBusinesses getBusinesses
-    DeleteBusiness deleteBusiness
 
     def setup() {
         createBusiness = new CreateBusiness(businessGateway)
-        getBusinesses = new GetBusinesses(businessGateway)
-        deleteBusiness = new DeleteBusiness(businessGateway)
     }
 
     def "test create business"() {
@@ -123,7 +119,7 @@ class CreateBusinessSpec extends Specification {
         and: "a random UUID identifying the business id created"
         def randomUUID = UUID.randomUUID().toString()
         businessGateway.createFromFile(businessToBeCreated) >> {
-            List.of(Business.builder()
+            Collections.singletonList(Business.builder()
                     .name("Granny's clothing")
                     .ownerFirstName("Satan")
                     .email("klerengekste@gmail.com")
