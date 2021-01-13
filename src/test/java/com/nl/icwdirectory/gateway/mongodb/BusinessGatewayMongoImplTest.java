@@ -12,6 +12,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -89,6 +90,26 @@ final class BusinessGatewayMongoImplTest {
         assertFalse(result.isEmpty());
     }
 
+    @Test
+    void shouldFindBusinessesByTag() {
+        //Given a business exists on db and a tag to be searched
+        TextIndexDefinition textIndex = new TextIndexDefinition.TextIndexDefinitionBuilder()
+                .onField("tags")
+                .build();
+        mongoTemplate.indexOps(Business.class).ensureIndex(textIndex);
+        final var sampleTestingBusiness = buildSampleBusiness();
+        mongoTemplate.insert(sampleTestingBusiness);
+
+        final var criteria = "tailoring";
+
+        //When the search is performed
+        final var result = businessGatewayMongoImpl.getBusinessesByTagsAndName(criteria);
+
+        //Then the result is not empty
+        assertFalse(result.isEmpty());
+        assertTrue(result.get(0).getTags().contains(criteria));
+    }
+
     private Business buildSampleBusiness() {
         return Business.builder()
                 .name("Granny's clothing")
@@ -103,7 +124,7 @@ final class BusinessGatewayMongoImplTest {
                 .logo("aUrl")
                 .images(Collections.singletonList("aUrl"))
                 .description("The business purpose")
-                .tags(List.of("clothing", "kleren"))
+                .tags(List.of("clothing", "kleren", "tailoring"))
                 .build();
     }
 

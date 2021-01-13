@@ -12,6 +12,7 @@ import com.nl.icwdirectory.gateway.http.mapping.URLMapping;
 import com.nl.icwdirectory.usecase.CreateBusiness;
 import com.nl.icwdirectory.usecase.DeleteBusiness;
 import com.nl.icwdirectory.usecase.GetBusinesses;
+import com.nl.icwdirectory.usecase.SearchBusinesses;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,6 +33,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import static java.util.Collections.singletonList;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
@@ -51,6 +53,7 @@ final class BusinessControllerTest {
     private DeleteBusiness deleteBusiness;
     private CreateBusiness createBusiness;
     private GetBusinesses getBusinesses;
+    private SearchBusinesses searchBusinesses;
     private BusinessController businessController;
     private MockMvc mockMvc;
     private ObjectMapper objectMapper;
@@ -64,12 +67,14 @@ final class BusinessControllerTest {
         deleteBusiness = mock(DeleteBusiness.class);
         createBusiness = mock(CreateBusiness.class);
         getBusinesses = mock(GetBusinesses.class);
+        searchBusinesses = mock(SearchBusinesses.class);
         businessController = new BusinessController(
                 jsonToBusinessConverter,
                 businessToJsonConverter,
                 deleteBusiness,
                 createBusiness,
-                getBusinesses);
+                getBusinesses,
+                searchBusinesses);
         mockMvc = standaloneSetup(businessController).build();
         objectMapper = new ObjectMapper();
     }
@@ -145,7 +150,7 @@ final class BusinessControllerTest {
                 .email("klerengekste@gmail.com")
                 .website("www.customclothing.nl")
                 .logo("aUrl")
-                .images(Collections.singletonList("aUrl"))
+                .images(singletonList("aUrl"))
                 .description("The business purpose")
                 .tags(List.of("clothing", "kleren"))
                 .build();
@@ -191,27 +196,9 @@ final class BusinessControllerTest {
     void shouldReturnPagedResultOnRequest() throws Exception {
         ReflectionTestUtils.setField(businessController, "elementsPerPage", 6);
 
-        PageImpl<Business> result = new PageImpl<>(List.of(Business.builder()
-                .name("Granny's clothing")
-                .ownerFirstName("Satan")
-                .email("klerengekste@gmail.com")
-                .phone("0629795318")
-                .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
-                        .build())
-                .id("b973713a-c71d-437a-a65a-e38d23471e4b")
-                .build()));
+        PageImpl<Business> result = new PageImpl<>(singletonList(buildBusinessResult()));
 
-        List<BusinessJson> expectedResult = List.of(BusinessJson.builder()
-                .name("Granny's clothing")
-                .ownerFirstName("Satan")
-                .email("klerengekste@gmail.com")
-                .phone("0629795318")
-                .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
-                        .build())
-                .id("b973713a-c71d-437a-a65a-e38d23471e4b")
-                .build());
+        List<BusinessJson> expectedResult = singletonList(buildBusinessJsonResult());
 
         when(getBusinesses.getAllBusinesses(any(PageRequest.class))).thenReturn(result);
         when(businessToJsonConverter.convert(any())).thenCallRealMethod();
@@ -231,6 +218,58 @@ final class BusinessControllerTest {
         assertEquals(expectedResult, businessFromResponse);
         verify(getBusinesses).getAllBusinesses(any());
         verify(businessToJsonConverter).convert(any());
+    }
+
+    @Test
+    void shouldReturnAResultWhenSearchingByTag() throws Exception{
+        //Given a tag for searching businesses
+        final var criteria = "tailoring";
+        final var preResult = singletonList(buildBusinessResult());
+        final var expectedResult = singletonList(buildBusinessJsonResult());
+
+        when(searchBusinesses.getBusinessesByTagsAndName(criteria)).thenReturn(preResult);
+        when(businessToJsonConverter.convert(any())).thenCallRealMethod();
+
+        //When the endpoint is invoked
+        final var mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.SEARCH_BUSINESSES), criteria)
+                .contentType(APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        String responseBodyAsString = mvcResult.getResponse().getContentAsString();
+        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {});
+
+        //Then a business was found by the searched tag
+        assertNotNull(mvcResult.getResponse());
+        assertEquals(expectedResult, businessFromResponse);
+        verify(searchBusinesses).getBusinessesByTagsAndName(any());
+        verify(businessToJsonConverter).convert(any());
+    }
+
+    private Business buildBusinessResult() {
+        return Business.builder()
+                .name("Granny's clothing")
+                .ownerFirstName("Satan")
+                .email("klerengekste@gmail.com")
+                .phone("0629795318")
+                .address(Address.builder()
+                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .build())
+                .id("b973713a-c71d-437a-a65a-e38d23471e4b")
+                .build();
+    }
+
+    private BusinessJson buildBusinessJsonResult() {
+        return BusinessJson.builder()
+                .name("Granny's clothing")
+                .ownerFirstName("Satan")
+                .email("klerengekste@gmail.com")
+                .phone("0629795318")
+                .address(Address.builder()
+                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .build())
+                .id("b973713a-c71d-437a-a65a-e38d23471e4b")
+                .build();
     }
 
 }

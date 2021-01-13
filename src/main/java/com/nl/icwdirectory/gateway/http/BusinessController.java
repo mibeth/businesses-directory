@@ -90,7 +90,7 @@ final class BusinessController {
 
     @Operation(summary = "Gets businesses according to inputted text")
     @GetMapping(URLMapping.SEARCH_BUSINESSES)
-    public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam final String criteria) {
+    public ResponseEntity<List<BusinessJson>> getBusinessesByTagAndName(@PathVariable final String criteria) {
         final var businesses = searchBusinesses.getBusinessesByTagsAndName(criteria);
 
         return ResponseEntity.ok(
