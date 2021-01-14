@@ -37,7 +37,7 @@ jobs:
           heroku_app_name: ${{secrets.HEROKU_APP}}
           heroku_email: ${{secrets.HEROKU_MAIL}}
           healthcheck: "https://${{secrets.HEROKU_APP}}.herokuapp.com/actuator/health"
-          delay: 30
+          delay: 60
         env:
           HD_SPRING_DATA_MONGODB_URI: ${{secrets.DB_URI}}
           HD_SPRING_DATA_MONGODB_DATABASE: ${{secrets.DB_NAME}}
