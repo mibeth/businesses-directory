@@ -12,7 +12,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
@@ -93,10 +92,6 @@ final class BusinessGatewayMongoImplTest {
     @Test
     void shouldFindBusinessesByTag() {
         //Given a business exists on db and a tag to be searched
-        TextIndexDefinition textIndex = new TextIndexDefinition.TextIndexDefinitionBuilder()
-                .onField("tags")
-                .build();
-        mongoTemplate.indexOps(Business.class).ensureIndex(textIndex);
         final var sampleTestingBusiness = buildSampleBusiness();
         mongoTemplate.insert(sampleTestingBusiness);
 
