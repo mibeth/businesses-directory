@@ -39,5 +39,5 @@ jobs:
           healthcheck: "https://${{secrets.HEROKU_APP}}.herokuapp.com/actuator/health"
           delay: 30
         env:
-          spring.data.mongodb.uri: ${{secrets.DB_URI}}
-          spring.data.mongodb.database: ${{secrets.DB_NAME}}
+          spring_data_mongodb_uri: ${{secrets.DB_URI}}
+          spring_data_mongodb_database: ${{secrets.DB_NAME}}
