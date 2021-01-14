@@ -8,10 +8,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.TextIndexDefinition;
 import org.springframework.data.mongodb.core.query.TextCriteria;
 import org.springframework.data.mongodb.core.query.TextQuery;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 
 @Component
@@ -55,4 +57,12 @@ public final class BusinessGatewayMongoImpl implements BusinessGateway {
         return mongoTemplate.find(textQuery, Business.class, "businesses");
     }
 
+    @PostConstruct
+    private void createIndexes() {
+        final var textIndex = new TextIndexDefinition.TextIndexDefinitionBuilder()
+                .onField("name")
+                .onField("tags")
+                .build();
+        mongoTemplate.indexOps(Business.class).ensureIndex(textIndex);
+    }
 }
