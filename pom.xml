@@ -146,8 +146,8 @@
     </dependencies>
 
     <build>
+        <finalName>app</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
