@@ -36,6 +36,7 @@
         <maven.version>3.6</maven.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <opencsv.version>5.3</opencsv.version>
+        <sonar.skip>true</sonar.skip>
 
         <!-- Sonar configuration
         <sonar.projectKey>sonarCloudProjectKey</sonar.projectKey>
