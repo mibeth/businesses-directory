@@ -29,6 +29,7 @@ import java.util.List;
 import static java.util.stream.Collectors.toUnmodifiableList;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @Slf4j
 @RequestMapping("/directory")
@@ -80,7 +81,7 @@ final class BusinessController {
 
     @Operation(summary = "Gets all registered businesses")
     @GetMapping(URLMapping.GET_BUSINESSES)
-    public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam final int pageNumber) {
+    public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam(defaultValue = "0") final int pageNumber) {
         final Page<Business> businesses = getBusinesses.getAllBusinesses(
                 PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
 
