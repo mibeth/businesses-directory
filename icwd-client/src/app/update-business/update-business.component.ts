@@ -17,11 +17,7 @@ export class UpdateBusinessComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-
-    this.businessService.getBusinessById(this.id).subscribe(data => {
-      this.business = data;
-    }, error => console.log(error));
+    this.business = JSON.parse(this.route.snapshot.params["business"]);
   }
 
   onSubmit(){

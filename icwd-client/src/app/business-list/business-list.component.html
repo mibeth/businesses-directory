@@ -14,9 +14,9 @@
           <td>{{business.ownerFirstName}}</td>
           <td>{{business.ownerLastName}}</td>
             <td>
-                <button (click) = "updateBusiness(business.id)" class = "btn btn-info"> Update</button>
+                <button (click) = "updateBusiness(business)" class = "btn btn-info"> Update</button>
                 <button (click) = "deleteBusiness(business.id)" class = "btn btn-danger" style="margin-left: 10px"> Delete</button>
-                <button (click) = "businessDetails(business.id)" class = "btn btn-info" style="margin-left: 10px"> View</button>
+                <button (click) = "businessDetails(business)" class = "btn btn-info" style="margin-left: 10px"> View</button>
             </td>
         </tr>
     </tbody>

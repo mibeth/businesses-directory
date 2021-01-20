@@ -24,12 +24,12 @@ export class BusinessListComponent implements OnInit {
     });
   }
 
-  businessDetails(id: string){
-    this.router.navigate(['business-details', id]);
+  businessDetails(business: Business){
+    this.router.navigate(['business-details', JSON.stringify(business)]);
   }
 
-  updateBusiness(id: string){
-    this.router.navigate(['update-business', id]);
+  updateBusiness(business: Business){
+    this.router.navigate(['update-business', JSON.stringify(business)]);
   }
 
   deleteBusiness(id: string){

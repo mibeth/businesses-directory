@@ -15,12 +15,7 @@ export class BusinessDetailsComponent implements OnInit {
   constructor(private route: ActivatedRoute, private businessService: BusinessService) { }
 
   ngOnInit(): void {
-    this.id = this.route.snapshot.params['id'];
-
-    this.business = new Business();
-    this.businessService.getBusinessById(this.id).subscribe( data => {
-      this.business = data;
-    });
+    this.business = JSON.parse(this.route.snapshot.params["business"]);
   }
 
 }
