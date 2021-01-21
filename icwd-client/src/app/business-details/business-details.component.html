@@ -12,11 +12,11 @@
   <div>
     <label> <strong>Address: &nbsp;</strong></label>
     <br/>
-    <label> <strong>&nbsp;&nbsp;&nbsp;&nbsp; Street: &nbsp;</strong></label>{{business.email}}
+    <label> <strong>&nbsp;&nbsp;&nbsp;&nbsp; Street: &nbsp;</strong></label>{{business.address.street}}
     <br/>
-    <label> <strong>&nbsp;&nbsp;&nbsp;&nbsp; Postal code: &nbsp;</strong></label>{{business.email}}
+    <label> <strong>&nbsp;&nbsp;&nbsp;&nbsp; Postal code: &nbsp;</strong></label>{{business.address.postalCode}}
     <br/>
-    <label> <strong>&nbsp;&nbsp;&nbsp;&nbsp; City: &nbsp;</strong></label>{{business.email}}
+    <label> <strong>&nbsp;&nbsp;&nbsp;&nbsp; City: &nbsp;</strong></label>{{business.address.city}}
   </div>
   <div>
     <label> <strong>Description: &nbsp;</strong></label>{{business.description}}
@@ -31,10 +31,30 @@
     <label> <strong>Phone: &nbsp;</strong></label>{{business.phone}}
   </div>
   <div>
-    <label> <strong>Logo: &nbsp;</strong></label>{{business.logo}}
+    <div class="row">
+      <div class="col-sm">
+        <label> <strong>Logo: &nbsp;</strong></label>
+      </div>
+      <div class="col-sm">
+        <img src="{{business.logo}}" alt="Business' logo" width="300px" height="160px">
+      </div>
+    </div>
   </div>
   <div>
-    <label> <strong>Images: &nbsp;</strong></label>{{business.images}}
+    <div class="row">
+      <div class="col-sm">
+        <label> <strong>Images: &nbsp;</strong></label>
+      </div>
+      <div class="col-sm">
+        <ngb-carousel *ngIf="business.images">
+          <ng-template ngbSlide *ngFor="let image of business.images; let i = index">
+            <div class="picsum-img-wrapper">
+              <img src="{{image}}" alt="Image {{i}}" style="height:350px; width:600px;">
+            </div>
+          </ng-template>
+        </ngb-carousel>
+      </div>
+    </div>
   </div>
   <div>
     <label> <strong>Tags: &nbsp;</strong></label>{{business.tags}}

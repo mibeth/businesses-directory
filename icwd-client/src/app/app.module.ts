@@ -3,11 +3,12 @@ import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http'
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { FormsModule} from '@angular/forms';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BusinessListComponent } from './business-list/business-list.component';
 import { CreateBusinessComponent } from './create-business/create-business.component';
-import { FormsModule} from '@angular/forms';
 import { UpdateBusinessComponent } from './update-business/update-business.component';
-import { BusinessDetailsComponent } from './business-details/business-details.component'
+import { BusinessDetailsComponent } from './business-details/business-details.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { BusinessDetailsComponent } from './business-details/business-details.co
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
+    NgbModule
   ],
   providers: [],
   bootstrap: [AppComponent]
