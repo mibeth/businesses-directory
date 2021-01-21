@@ -29,7 +29,6 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -103,7 +102,7 @@ final class BusinessControllerTest {
                 .email("klerengekste@gmail.com")
                 .phone("0629795318")
                 .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .city("Eindhoven").postalCode("5618ZW").street("Bouteslaan 123")
                         .build())
                 .build();
         Business createdBusiness = Business.builder()
@@ -112,7 +111,7 @@ final class BusinessControllerTest {
                 .email("klerengekste@gmail.com")
                 .phone("0629795318")
                 .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .city("Eindhoven").postalCode("5618ZW").street("Bouteslaan 123")
                         .build())
                 .id(UUID.randomUUID().toString())
                 .build();
@@ -145,7 +144,7 @@ final class BusinessControllerTest {
                 .ownerFirstName("Satan")
                 .ownerLastName("Lucifer")
                 .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .city("Eindhoven").postalCode("5618ZW").street("Bouteslaan 123")
                         .build())
                 .email("klerengekste@gmail.com")
                 .website("www.customclothing.nl")
@@ -253,7 +252,7 @@ final class BusinessControllerTest {
                 .email("klerengekste@gmail.com")
                 .phone("0629795318")
                 .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .city("Eindhoven").postalCode("5618ZW").street("Bouteslaan 123")
                         .build())
                 .id("b973713a-c71d-437a-a65a-e38d23471e4b")
                 .build();
@@ -266,7 +265,7 @@ final class BusinessControllerTest {
                 .email("klerengekste@gmail.com")
                 .phone("0629795318")
                 .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .city("Eindhoven").postalCode("5618ZW").street("Bouteslaan 123")
                         .build())
                 .id("b973713a-c71d-437a-a65a-e38d23471e4b")
                 .build();
