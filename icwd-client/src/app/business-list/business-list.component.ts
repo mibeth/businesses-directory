@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Business } from '../business'
 import { BusinessService } from '../business.service'
 import { Router } from '@angular/router';
+
 @Component({
   selector: 'app-business-list',
   templateUrl: './business-list.component.html',

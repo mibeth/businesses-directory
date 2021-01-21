@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Business } from '../business';
 import { ActivatedRoute } from '@angular/router';
 import { BusinessService } from '../business.service';
+import { Subscription } from "rxjs";
 
 @Component({
   selector: 'app-business-details',
@@ -10,12 +11,18 @@ import { BusinessService } from '../business.service';
 })
 export class BusinessDetailsComponent implements OnInit {
 
-  id: string
   business: Business
+  private subscription: Subscription
+
   constructor(private route: ActivatedRoute, private businessService: BusinessService) { }
 
   ngOnInit(): void {
-    this.business = JSON.parse(this.route.snapshot.params["business"]);
+    this.subscription = this.route.params.subscribe(
+          (param: any) => this.business = JSON.parse(param['business'])
+        );
   }
 
+  ngOnDestroy() {
+      this.subscription.unsubscribe();
+    }
 }
