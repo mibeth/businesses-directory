@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Business } from '../business';
+import { Address } from '../address';
 import { BusinessService } from '../business.service';
 import { Router } from '@angular/router';
 
@@ -11,10 +12,12 @@ import { Router } from '@angular/router';
 export class CreateBusinessComponent implements OnInit {
 
   business: Business = new Business();
+
   constructor(private businessService: BusinessService,
     private router: Router) { }
 
   ngOnInit(): void {
+    this.business.address = new Address();
   }
 
   saveBusiness(){

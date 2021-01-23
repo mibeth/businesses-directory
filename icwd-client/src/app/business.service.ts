@@ -17,6 +17,8 @@ export class BusinessService {
   }
 
   createBusiness(business: Business): Observable<Object> {
+    business.images = business.images.toString().split(',');
+    business.tags = business.tags.toString().split(',');
     return this.http.post(`${this.baseUrl}/business`, business);
   }
 
@@ -31,5 +33,5 @@ export class BusinessService {
   getBusinessesList(): Observable<Business[]> {
     return this.http.get<Business[]>(`${this.baseUrl}/businesses`);
   }
-  
+
 }
