@@ -12,6 +12,7 @@ import java.util.List;
 @Builder
 public final class CreateBusinessJson {
 
+    private String id;
     @NotNull
     private String name;
     @NotNull

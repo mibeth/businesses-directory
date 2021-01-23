@@ -17,13 +17,12 @@ export class BusinessService {
   }
 
   createBusiness(business: Business): Observable<Object> {
-    business.images = business.images.toString().split(',');
-    business.tags = business.tags.toString().split(',');
+    this.fixArrays(business);
     return this.http.post(`${this.baseUrl}/business`, business);
   }
 
-  updateBusiness(id: string, business: Business): Observable<Object>{
-    return this.http.put(`${this.baseUrl}/${id}`, business);
+  updateBusiness(business: Business): Observable<Object>{
+    return this.createBusiness(business);
   }
 
   deleteBusiness(id: string): Observable<Object> {
@@ -34,4 +33,8 @@ export class BusinessService {
     return this.http.get<Business[]>(`${this.baseUrl}/businesses`);
   }
 
+  private fixArrays(business: Business) {
+    business.images = business.images.toString().split(',');
+    business.tags = business.tags.toString().split(',');
+  }
 }

@@ -11,7 +11,6 @@ import { Subscription } from "rxjs";
 })
 export class UpdateBusinessComponent implements OnInit {
 
-  id: string;
   business: Business = new Business();
   private subscription: Subscription
 
@@ -26,7 +25,7 @@ export class UpdateBusinessComponent implements OnInit {
   }
 
   onSubmit(){
-    this.businessService.updateBusiness(this.id, this.business).subscribe( data =>{
+    this.businessService.updateBusiness(this.business).subscribe( data =>{
       this.goToBusinessList();
     }
     , error => console.log(error));

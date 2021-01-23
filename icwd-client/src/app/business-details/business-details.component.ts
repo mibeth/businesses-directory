@@ -16,7 +16,9 @@ export class BusinessDetailsComponent implements OnInit {
   business: Business
   private subscription: Subscription
 
-  constructor(private route: ActivatedRoute, private businessService: BusinessService, config: NgbCarouselConfig) {
+  constructor(private route: ActivatedRoute,
+              private businessService: BusinessService,
+              config: NgbCarouselConfig) {
        config.interval = 3000;
        config.keyboard = false;
        config.pauseOnHover = true;
