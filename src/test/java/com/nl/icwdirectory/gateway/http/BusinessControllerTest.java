@@ -19,9 +19,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,6 +26,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -175,35 +173,30 @@ final class BusinessControllerTest {
     }
 
     @Test
-    void shouldReturnEmptyResultWhenNoRecordsFound() throws Exception {
-        ReflectionTestUtils.setField(businessController, "elementsPerPage", 6);
+    void shouldReturnNoContentResultWhenNoRecordsFound() throws Exception {
 
-        when(getBusinesses.getAllBusinesses(any())).thenReturn(Page.empty());
+        when(getBusinesses.getAllBusinesses()).thenReturn(Collections.emptyList());
 
         MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
-                .queryParam("pageNumber", String.valueOf(0))
                 .contentType(APPLICATION_JSON))
-                .andExpect(status().isOk())
+                .andExpect(status().isNoContent())
                 .andReturn();
 
         assertNotNull(mvcResult.getResponse());
-        assertEquals("[]", mvcResult.getResponse().getContentAsString());
-        verify(getBusinesses).getAllBusinesses(any());
+        assertEquals("", mvcResult.getResponse().getContentAsString());
+        verify(getBusinesses).getAllBusinesses();
     }
 
     @Test
-    void shouldReturnPagedResultOnRequest() throws Exception {
-        ReflectionTestUtils.setField(businessController, "elementsPerPage", 6);
-
-        PageImpl<Business> result = new PageImpl<>(singletonList(buildBusinessResult()));
+    void shouldReturnResultOnRequest() throws Exception {
+        List<Business> result = singletonList(buildBusinessResult());
 
         List<BusinessJson> expectedResult = singletonList(buildBusinessJsonResult());
 
-        when(getBusinesses.getAllBusinesses(any(PageRequest.class))).thenReturn(result);
+        when(getBusinesses.getAllBusinesses()).thenReturn(result);
         when(businessToJsonConverter.convert(any())).thenCallRealMethod();
 
         MvcResult mvcResult = mockMvc.perform(get(PATH_MAPPING.concat(URLMapping.GET_BUSINESSES))
-                .param("pageNumber", String.valueOf(0))
                 .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andReturn();
@@ -211,16 +204,17 @@ final class BusinessControllerTest {
 
         // THEN It should return a result list with values in it
         String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {});
+        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {
+        });
 
         assertNotNull(mvcResult.getResponse());
         assertEquals(expectedResult, businessFromResponse);
-        verify(getBusinesses).getAllBusinesses(any());
+        verify(getBusinesses).getAllBusinesses();
         verify(businessToJsonConverter).convert(any());
     }
 
     @Test
-    void shouldReturnAResultWhenSearchingByTag() throws Exception{
+    void shouldReturnAResultWhenSearchingByTag() throws Exception {
         //Given a tag for searching businesses
         final var criteria = "tailoring";
         final var preResult = singletonList(buildBusinessResult());
@@ -236,7 +230,8 @@ final class BusinessControllerTest {
                 .andReturn();
 
         String responseBodyAsString = mvcResult.getResponse().getContentAsString();
-        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {});
+        List<BusinessJson> businessFromResponse = objectMapper.readValue(responseBodyAsString, new TypeReference<>() {
+        });
 
         //Then a business was found by the searched tag
         assertNotNull(mvcResult.getResponse());

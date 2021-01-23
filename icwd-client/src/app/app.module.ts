@@ -5,6 +5,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule} from '@angular/forms';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DataTablesModule } from 'angular-datatables';
 import { BusinessListComponent } from './business-list/business-list.component';
 import { CreateBusinessComponent } from './create-business/create-business.component';
 import { UpdateBusinessComponent } from './update-business/update-business.component';
@@ -23,7 +24,8 @@ import { BusinessDetailsComponent } from './business-details/business-details.co
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
-    NgbModule
+    NgbModule,
+    DataTablesModule
   ],
   providers: [],
   bootstrap: [AppComponent]

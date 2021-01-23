@@ -15,10 +15,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,9 +38,6 @@ final class BusinessController {
     private final CreateBusiness createBusiness;
     private final GetBusinesses getBusinesses;
     private final SearchBusinesses searchBusinesses;
-
-    @Value("${elements.per.page}")
-    private Integer elementsPerPage;
 
     @Operation(summary = "Delete a Business")
     @ApiResponses(value = {
@@ -81,12 +74,14 @@ final class BusinessController {
 
     @Operation(summary = "Gets all registered businesses")
     @GetMapping(URLMapping.GET_BUSINESSES)
-    public ResponseEntity<List<BusinessJson>> getAllBusinesses(@RequestParam(defaultValue = "0") final int pageNumber) {
-        final Page<Business> businesses = getBusinesses.getAllBusinesses(
-                PageRequest.of(pageNumber, elementsPerPage, Sort.Direction.ASC, "business_name"));
+    public ResponseEntity<List<BusinessJson>> getAllBusinesses() {
+        final var businesses = getBusinesses.getAllBusinesses();
 
-        return ResponseEntity.ok(
-                businesses.stream().map(businessToJsonConverter::convert).collect(toUnmodifiableList()));
+        if (businesses.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+
+        return ResponseEntity.ok(businesses.stream().map(businessToJsonConverter::convert).collect(toUnmodifiableList()));
     }
 
     @Operation(summary = "Gets businesses according to inputted text")

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Business } from '../business';
 import { ActivatedRoute } from '@angular/router';
 import { BusinessService } from '../business.service';
@@ -11,7 +11,7 @@ import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap';
   styleUrls: ['./business-details.component.css'],
   providers: [NgbCarouselConfig]
 })
-export class BusinessDetailsComponent implements OnInit {
+export class BusinessDetailsComponent implements OnDestroy, OnInit {
 
   business: Business
   private subscription: Subscription

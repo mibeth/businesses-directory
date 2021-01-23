@@ -8,9 +8,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
@@ -57,9 +54,7 @@ final class BusinessGatewayMongoImplTest {
 
     @Test
     void shouldReturnEmptyResultWhenNoRecordsFound() {
-        Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
-                PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
-        );
+        List<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses();
 
         assertNotNull(allBusinesses);
         assertTrue(allBusinesses.isEmpty());
@@ -70,13 +65,11 @@ final class BusinessGatewayMongoImplTest {
         Business sampleTestingBusiness = buildSampleBusiness();
         mongoTemplate.insert(sampleTestingBusiness);
 
-        Page<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses(
-                PageRequest.of(0, 6, Sort.Direction.ASC, "business_name")
-        );
+        List<Business> allBusinesses = businessGatewayMongoImpl.getAllBusinesses();
 
         assertNotNull(allBusinesses);
-        assertEquals(1, allBusinesses.getTotalElements());
-        assertEquals("Granny's clothing", allBusinesses.getContent().get(0).getName());
+        assertEquals(1, allBusinesses.size());
+        assertEquals("Granny's clothing", allBusinesses.get(0).getName());
     }
 
     @Test

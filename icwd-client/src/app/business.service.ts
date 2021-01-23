@@ -29,8 +29,8 @@ export class BusinessService {
     return this.http.delete(`${this.baseUrl}/businesses/${id}`);
   }
 
-  getBusinessesList(): Observable<Business[]> {
-    return this.http.get<Business[]>(`${this.baseUrl}/businesses`);
+  getBusinessesList(): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/businesses`);
   }
 
   private fixArrays(business: Business) {
