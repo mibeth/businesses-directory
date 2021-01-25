@@ -2,7 +2,8 @@ spring:
   main:
     banner-mode: "off"
 
-elements.per.page: 6
+server:
+  port: ${PORT:8080}
 
 springdoc:
   swagger-ui:

@@ -27,7 +27,7 @@ final class BusinessToJsonConverterTest {
                 .ownerFirstName("Satan")
                 .ownerLastName("Lucifer")
                 .address(Address.builder()
-                        .city("Eindhoven").postCode("5618ZW").street("Bouteslaan 123")
+                        .city("Eindhoven").postalCode("5618ZW").street("Bouteslaan 123")
                         .build())
                 .email("klerengekste@gmail.com")
                 .website("www.customclothing.nl")

@@ -12,6 +12,7 @@ public class JsonToBusinessConverter implements Converter<CreateBusinessJson, Bu
     @Override
     public Business convert(final CreateBusinessJson source) {
         return Business.builder()
+                .id(source.getId())
                 .name(source.getName())
                 .ownerFirstName(source.getOwnerFirstName())
                 .ownerLastName(source.getOwnerLastName())

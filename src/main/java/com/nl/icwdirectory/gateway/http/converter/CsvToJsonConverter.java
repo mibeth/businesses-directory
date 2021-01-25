@@ -21,7 +21,7 @@ public class CsvToJsonConverter implements Converter<CsvBusiness, CreateBusiness
                 .ownerLastName(source.getOwnerLastName())
                 .address(Address.builder()
                         .street(source.getStreet())
-                        .postCode(source.getPostCode())
+                        .postalCode(source.getPostCode())
                         .city(source.getCity())
                         .build())
                 .email(source.getEmail())
