@@ -21,7 +21,8 @@ export class BusinessListComponent implements OnDestroy, OnInit {
   ngOnInit(): void {
     this.getBusinesses();
     this.dtOptions = {
-          pagingType: 'full_numbers'
+          pagingType: 'full_numbers',
+          retrieve: true
         };
   }
 
@@ -42,7 +43,6 @@ export class BusinessListComponent implements OnDestroy, OnInit {
 
   deleteBusiness(id: string){
     this.businessService.deleteBusiness(id).subscribe( data => {
-      console.log(data);
       this.getBusinesses();
     })
   }
