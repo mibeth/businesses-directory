@@ -11,6 +11,8 @@ import { UploadBusinessesService } from '../upload-businesses.service';
 })
 export class UploadComponent implements OnInit {
 
+  resultMessage;
+
   @ViewChild("fileUpload", {static: false}) fileUpload: ElementRef;files = [];
   constructor(private uploadService: UploadBusinessesService) { }
 
@@ -33,8 +35,11 @@ export class UploadComponent implements OnInit {
         catchError((error: HttpErrorResponse) => {
           return of(error.error);
         })).subscribe((event: any) => {
+            if(typeof (event) === 'string'){
+              this.resultMessage = event;
+            }
           if (typeof (event) === 'object') {
-            console.log(event.body);
+             this.resultMessage = event.text;
           }
         });
 
