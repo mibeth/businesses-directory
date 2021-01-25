@@ -10,6 +10,14 @@ import { BusinessListComponent } from './business-list/business-list.component';
 import { CreateBusinessComponent } from './create-business/create-business.component';
 import { UpdateBusinessComponent } from './update-business/update-business.component';
 import { BusinessDetailsComponent } from './business-details/business-details.component';
+import { UploadComponent } from './upload/upload.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule} from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 @NgModule({
   declarations: [
@@ -17,7 +25,8 @@ import { BusinessDetailsComponent } from './business-details/business-details.co
     BusinessListComponent,
     CreateBusinessComponent,
     UpdateBusinessComponent,
-    BusinessDetailsComponent
+    BusinessDetailsComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,
@@ -25,7 +34,13 @@ import { BusinessDetailsComponent } from './business-details/business-details.co
     HttpClientModule,
     FormsModule,
     NgbModule,
-    DataTablesModule
+    DataTablesModule,
+    BrowserAnimationsModule,
+    MatToolbarModule,
+    MatIconModule,
+    MatButtonModule,
+    MatCardModule,
+    MatProgressBarModule
   ],
   providers: [],
   bootstrap: [AppComponent]
