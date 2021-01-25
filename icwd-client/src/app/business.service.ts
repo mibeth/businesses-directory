@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../environments/environment';
 import { Business } from './business';
 
 @Injectable({
@@ -8,7 +9,7 @@ import { Business } from './business';
 })
 export class BusinessService {
 
-  private baseUrl = "http://localhost:8080/directory";
+  private baseUrl = environment.backendBaseUrl + "/directory";
 
   constructor(private http: HttpClient) { }
 
