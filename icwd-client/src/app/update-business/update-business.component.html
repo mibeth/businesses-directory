@@ -2,6 +2,10 @@
   <h3> Update Business </h3>
   <form (ngSubmit)="onSubmit()">
 
+    <div *ngIf="errorMessage" class="offset-md-3 col-md-6 alert alert-danger row justify-content-center" role="alert">
+      {{ errorMessage }}
+    </div>
+
     <div class="form-group">
       <label for="name">Name</label>
       <input type="text" class="form-control" id="name" [(ngModel)]="business.name" name="name">
@@ -22,7 +26,8 @@
       <label for="name">Street</label>
       <input type="text" class="form-control" id="street" [(ngModel)]="business.address.street" name="street">
       <label for="name">Postal Code</label>
-      <input type="text" class="form-control" id="postalCode" [(ngModel)]="business.address.postalCode" name="postalCode">
+      <input type="text" class="form-control" id="postalCode" [(ngModel)]="business.address.postalCode"
+             name="postalCode">
       <label for="name">City</label>
       <input type="text" class="form-control" id="city" [(ngModel)]="business.address.city" name="city">
     </div>

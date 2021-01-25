@@ -12,7 +12,8 @@ import { Subscription } from "rxjs";
 export class UpdateBusinessComponent implements OnInit {
 
   business: Business = new Business();
-  private subscription: Subscription
+  private subscription: Subscription;
+  errorMessage;
 
   constructor(private businessService: BusinessService,
     private route: ActivatedRoute,
@@ -28,7 +29,10 @@ export class UpdateBusinessComponent implements OnInit {
     this.businessService.updateBusiness(this.business).subscribe( data =>{
       this.goToBusinessList();
     }
-    , error => console.log(error));
+    , (error) => {
+                  this.errorMessage = error.error.message;
+                  throw error;
+                });
   }
 
   goToBusinessList(){

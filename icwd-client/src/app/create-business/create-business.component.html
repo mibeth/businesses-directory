@@ -1,21 +1,25 @@
 <div class="col-md-6 offset-md-3" xmlns="http://www.w3.org/1999/html">
   <h3> Create Business </h3>
-  <form (ngSubmit) = "onSubmit()">
+  <form (ngSubmit)="onSubmit()">
 
-      <div class="form-group">
-          <label> Name</label>
-          <input type="text" class="form-control" id="name" [(ngModel)]="business.name" name="name">
-      </div>
+    <div *ngIf="errorMessage" class="offset-md-3 col-md-6 alert alert-danger row justify-content-center" role="alert">
+      {{ errorMessage }}
+    </div>
 
-      <div class="form-group">
-          <label> Owner First Name</label>
-          <input type="text" class="form-control" id="firstName" [(ngModel)]="business.ownerFirstName" name="firstName">
-      </div>
+    <div class="form-group">
+      <label> Name</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="business.name" name="name">
+    </div>
 
-      <div class="form-group">
-          <label> Owner Last Name</label>
-          <input type="text" class="form-control" id="lasttName" [(ngModel)]="business.ownerLastName" name="lasttName">
-      </div>
+    <div class="form-group">
+      <label> Owner First Name</label>
+      <input type="text" class="form-control" id="firstName" [(ngModel)]="business.ownerFirstName" name="firstName">
+    </div>
+
+    <div class="form-group">
+      <label> Owner Last Name</label>
+      <input type="text" class="form-control" id="lasttName" [(ngModel)]="business.ownerLastName" name="lasttName">
+    </div>
 
     <div class="form-group">
       <label> Address</label>
@@ -23,7 +27,8 @@
       <label> Street</label>
       <input type="text" class="form-control" id="street" [(ngModel)]="business.address.street" name="street">
       <label> Postal Code</label>
-      <input type="text" class="form-control" id="postalCode" [(ngModel)]="business.address.postalCode" name="postalCode">
+      <input type="text" class="form-control" id="postalCode" [(ngModel)]="business.address.postalCode"
+             name="postalCode">
       <label> City</label>
       <input type="text" class="form-control" id="city" [(ngModel)]="business.address.city" name="city">
     </div>
@@ -63,7 +68,7 @@
       <input type="text" class="form-control" id="tags" [(ngModel)]="business.tags" name="tags">
     </div>
 
-      <button class = "btn btn-success" type ="submit">Submit</button>
+    <button class="btn btn-success" type="submit">Submit</button>
 
   </form>
-  </div>
+</div>

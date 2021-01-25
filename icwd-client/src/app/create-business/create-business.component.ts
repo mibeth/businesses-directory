@@ -12,12 +12,15 @@ import { Router } from '@angular/router';
 export class CreateBusinessComponent implements OnInit {
 
   business: Business = new Business();
+  errorMessage;
 
   constructor(private businessService: BusinessService,
     private router: Router) { }
 
   ngOnInit(): void {
     this.business.address = new Address();
+    this.business.images = [];
+    this.business.tags = [];
   }
 
   saveBusiness(){
@@ -25,7 +28,10 @@ export class CreateBusinessComponent implements OnInit {
       console.log(data);
       this.goToBusinessList();
     },
-    error => console.log(error));
+    (error) => {
+            this.errorMessage = error.error.message;
+            throw error;
+          });
   }
 
   goToBusinessList(){
