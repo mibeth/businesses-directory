@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  backendBaseUrl: "http://localhost:8080"
+  backendBaseUrl: "https://icw-directory.herokuapp.com"
 };
 
 /*
@@ -15,3 +15,5 @@ export const environment = {
  * on performance if an error is thrown.
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
+//"https://icw-directory.herokuapp.com"
+//backendBaseUrl: "localhost:8080"
