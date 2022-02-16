@@ -36,6 +36,7 @@
         <maven.version>3.6</maven.version>
         <sonar-maven-plugin.version>3.7.0.1746</sonar-maven-plugin.version>
         <opencsv.version>5.3</opencsv.version>
+        <sonar.skip>true</sonar.skip>
 
         <!-- Sonar configuration
         <sonar.projectKey>sonarCloudProjectKey</sonar.projectKey>
@@ -60,21 +61,22 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
         </dependency>
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <!--Swagger dependencies -->
@@ -96,6 +98,12 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${opencsv.version}</version>
         </dependency>
 
         <dependency>
@@ -135,17 +143,11 @@
             <version>${spotbugs-annotations.version}</version>
             <optional>true</optional>
         </dependency>
-
-        <dependency>
-            <groupId>com.opencsv</groupId>
-            <artifactId>opencsv</artifactId>
-            <version>${opencsv.version}</version>
-        </dependency>
     </dependencies>
 
     <build>
+        <finalName>app</finalName>
         <plugins>
-
             <plugin>
                 <groupId>org.codehaus.gmavenplus</groupId>
                 <artifactId>gmavenplus-plugin</artifactId>
@@ -339,6 +341,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.heroku.sdk</groupId>
+                <artifactId>heroku-maven-plugin</artifactId>
+                <version>3.0.3</version>
+                <configuration>
+                    <appName>icw-directory</appName>
+                </configuration>
             </plugin>
         </plugins>
     </build>

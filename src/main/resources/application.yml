@@ -1,8 +1,13 @@
 spring:
   main:
     banner-mode: "off"
+  data:
+    mongodb:
+      uri: mongodb+srv://admin-user:Adm1n636@mflix-wwebc.mongodb.net/test?maxPoolSize=10&w=majority&wtimeoutMS=2500&connectTimeoutMS=2000
+      database: icw_directory
 
-elements.per.page: 6
+server:
+  port: ${PORT:8080}
 
 springdoc:
   swagger-ui:

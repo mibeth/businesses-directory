@@ -1,0 +1,74 @@
+<div class="col-md-6 offset-md-3" xmlns="http://www.w3.org/1999/html">
+  <h3> Create Business </h3>
+  <form (ngSubmit)="onSubmit()">
+
+    <div *ngIf="errorMessage" class="offset-md-3 col-md-6 alert alert-danger row justify-content-center" role="alert">
+      {{ errorMessage }}
+    </div>
+
+    <div class="form-group">
+      <label> Name</label>
+      <input type="text" class="form-control" id="name" [(ngModel)]="business.name" name="name">
+    </div>
+
+    <div class="form-group">
+      <label> Owner First Name</label>
+      <input type="text" class="form-control" id="firstName" [(ngModel)]="business.ownerFirstName" name="firstName">
+    </div>
+
+    <div class="form-group">
+      <label> Owner Last Name</label>
+      <input type="text" class="form-control" id="lasttName" [(ngModel)]="business.ownerLastName" name="lasttName">
+    </div>
+
+    <div class="form-group">
+      <label> Address</label>
+      <br/>
+      <label> Street</label>
+      <input type="text" class="form-control" id="street" [(ngModel)]="business.address.street" name="street">
+      <label> Postal Code</label>
+      <input type="text" class="form-control" id="postalCode" [(ngModel)]="business.address.postalCode"
+             name="postalCode">
+      <label> City</label>
+      <input type="text" class="form-control" id="city" [(ngModel)]="business.address.city" name="city">
+    </div>
+
+    <div class="form-group">
+      <label> Email</label>
+      <input type="text" class="form-control" id="email" [(ngModel)]="business.email" name="email">
+    </div>
+
+    <div class="form-group">
+      <label> Website</label>
+      <input type="text" class="form-control" id="website" [(ngModel)]="business.website" name="website">
+    </div>
+
+    <div class="form-group">
+      <label> Phone</label>
+      <input type="text" class="form-control" id="phone" [(ngModel)]="business.phone" name="phone">
+    </div>
+
+    <div class="form-group">
+      <label> Logo</label>
+      <input type="text" class="form-control" id="logo" [(ngModel)]="business.logo" name="logo">
+    </div>
+
+    <div class="form-group">
+      <label> Images</label>
+      <input type="text" class="form-control" id="images" [(ngModel)]="business.images" name="images">
+    </div>
+
+    <div class="form-group">
+      <label> Description</label>
+      <input type="text" class="form-control" id="description" [(ngModel)]="business.description" name="description">
+    </div>
+
+    <div class="form-group">
+      <label> Tags</label>
+      <input type="text" class="form-control" id="tags" [(ngModel)]="business.tags" name="tags">
+    </div>
+
+    <button class="btn btn-success" type="submit">Submit</button>
+
+  </form>
+</div>

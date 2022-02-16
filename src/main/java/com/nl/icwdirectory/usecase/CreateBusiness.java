@@ -19,7 +19,7 @@ public class CreateBusiness {
 
     private static final String PHONE_PATTERNS
             = "^\\d{10}$" //Ten digit number
-            + "|^(\\+\\d{1,2})?\\d{9}$"; //Starting by +
+            + "|^(\\+\\d{1,2})?\\d{9,10}$"; //Starting by +
     private static final Pattern VALID_PHONE = Pattern.compile(PHONE_PATTERNS);
     private static final String EMAIL_PATTERN = "^(.+)@(.+)$";
     private static final Pattern VALID_EMAIL = Pattern.compile(EMAIL_PATTERN);

@@ -1,0 +1,23 @@
+<h2> Businesses List</h2>
+<table datatable class="row-border hover" [dtOptions]="dtOptions" [dtTrigger]="dtTrigger">
+    <thead>
+        <tr>
+          <th>Name</th>
+          <th>Owner first name</th>
+          <th>Owner last name</th>
+          <th> Actions </th>
+        </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor = "let business of businesses" >
+          <td>{{business.name}}</td>
+          <td>{{business.ownerFirstName}}</td>
+          <td>{{business.ownerLastName}}</td>
+            <td>
+                <button (click) = "updateBusiness(business)" class = "btn btn-info"> Update</button>
+                <button (click) = "deleteBusiness(business.id)" class = "btn btn-danger" style="margin-left: 10px"> Delete</button>
+                <button (click) = "businessDetails(business)" class = "btn btn-info" style="margin-left: 10px"> View</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
